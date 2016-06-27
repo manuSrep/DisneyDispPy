@@ -2,13 +2,13 @@
 # -*- coding: utf8 -*-
 
 """
-Functions and classes for easier file handling during loading.
+Disney Disparity.
 :author: Manuel Tuschen
 :date: 24.06.2016
 :license: GPL3
 """
 
-from __future__ import division, print_function, absolute_import
+from __future__ import division, absolute_import, unicode_literals, print_function
 
 import os
 import math
