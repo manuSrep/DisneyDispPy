@@ -23,18 +23,18 @@ def find_disp_bounds(Disps, min_disp, max_disp, stepsize):
 
     Parameters
     ----------
-    Disps: numpy.array [u]
+    Disps : numpy.array [u]
         Reliable disparity estimates. All other values must be NaN.
-    min_disp: int
+    min_disp : int
         The minimal disparity to sample for.
-    max_disp: int
+    max_disp : int
         The maximal disparity to sample for.
-    stepsize: float
+    stepsize : float
         The stepsize used during the sampling procedure.
 
     Returns
     ----------
-    DB: numpy.array [u,2]
+    DB : numpy.array [u,2]
         The estimated disparity bounds for each u at line s in each EPI.
     """
 
@@ -99,31 +99,31 @@ def sample_radiance(epi, s_hat, min_disp, max_disp, stepsize, DB, M, DEBUG=False
 
     Parameters
     ----------
-    epi: numpy.array [s,u]
+    epi : numpy.array [s,u]
         One gray-value epi.
-    s_hat: int
+    s_hat : int
         The current scanline s to sample for.
-    min_disp: int
+    min_disp : int
         The minimal disparity to sample for.
-    max_disp: int
+    max_disp : int
         The maximal disparity to sample for.
-    stepsize: float
+    stepsize : float
         The stepsize used during the sampling procedure.
-    DB: numpy.array [u,2]
+    DB : numpy.array [u,2]
         The minimal and maximal disparity bounds to sample in between.
-    M: numpy.array [u] boolean.
+    M : numpy.array [u] boolean.
         Mask which values to consider.
-    DEBUG: boolean, optional
+    DEBUG : boolean, optional
         Enable plotting to visualize the sampling process
 
     Returns
     ----------
-    R: numpy.array [u,d,s]
+    R : numpy.array [u,d,s]
         The set of sampled radiances. For each pixel u and disparity d the gray
         value for each scanline s is stored.
-    disp_range: numpy.array [d].
+    disp_range : numpy.array [d].
         The range of disparities used during the sampling.
-    plots: ndarray [d,s,u] or None.
+    plots : ndarray [d,s,u] or None.
         If plotting was enabled epis with markings of the sampling process.
     """
 
@@ -163,31 +163,31 @@ def sample_radiance_inner(epi, s_hat, disp_range, DB, M, plots, DEBUG=False):
 
     Parameters
     ----------
-    epi: numpy.array [s,u]
+    epi : numpy.array [s,u]
         One gray-value epi.
-    s_hat: int
+    s_hat : int
         The current scanline s to sample for.
-    min_disp: int
+    min_disp : int
         The minimal disparity to sample for.
-    max_disp: int
+    max_disp : int
         The maximal disparity to sample for.
-    stepsize: float
+    stepsize : float
         The stepsize used during the sampling procedure.
-    DB: numpy.array [u,2]
+    DB : numpy.array [u,2]
         The minimal and maximal disparity bounds to sample in between.
-    M: numpy.array [u] boolean.
+    M : numpy.array [u] boolean.
         Mask which values to consider.
-    plots: numpy.array [d,s,u].
+    plots : numpy.array [d,s,u].
         If plotting was enabled epis to mark on the sampling process.
-    DEBUG: boolean, optional
+    DEBUG : boolean, optional
         Enable plotting to visualize the sampling process
 
     Returns
     ----------
-    R: numpy.array [u,d,s]
+    R : numpy.array [u,d,s]
         The set of sampled radiances. For each pixel u and disparity d the gray
         value for each scanline s is stored.
-    plots: ndarray [d,s,u] or None.
+    plots : ndarray [d,s,u] or None.
         If plotting was enabled epis with markings of the sampling process.
     """
 

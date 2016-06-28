@@ -41,7 +41,7 @@ def edge_confidence(epi, window=9, threshold=0.02):
 
     Returns
     ----------
-    Ce:  numpy.array [v,u]
+    Ce : numpy.array [v,u]
          Edge confidence values for each EPI pixel.
     Me : numpy.array [v,u] of boolean.
         True means an edge was discovered for at that pixel.
@@ -95,22 +95,22 @@ def disparity_confidence(S, Ce, threshold=0.1):
 
     Parameters
     ----------
-    S: numpy.array [u,d]
+    S : numpy.array [u,d]
         The calculated scores for each sampled radiance at each pixel u.
-    Ce:  numpy.array [u]
+    Ce :  numpy.array [u]
          Edge confidence values for each EPI pixel.
     threshold : float, optional
         The threshold which must be overcome for the depth confidence.
 
     Returns
     ----------
-    Cd::  numpy.array [u]
+    Cd :  numpy.array [u]
          The calculated confidence values for each pixel.
     Md : numpy.array [u] of boolean.
         True means edge confidence is sufficient.
-    S_max: numpy.array [u]
+    S_max : numpy.array [u]
         The maximal score over all disparities per pixel.
-    S_mean: numpy.array [u]
+    S_mean : numpy.array [u]
         The mean score over all disparities per pixel.
     """
 

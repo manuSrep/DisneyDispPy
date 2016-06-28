@@ -22,25 +22,25 @@ def score_computation(R, epi, s_hat, M, h=0.02, NOISEFREE=False):
 
     Parameters
     ----------
-    R: numpy.array [u,d,s]
+    R : numpy.array [u,d,s]
        The set of sampled radiances. For each pixel u and disparity d the gray
        value for each scanline s is stored.
-    epi: numpy.array [s,u]
+    epi : numpy.array [s,u]
        One gray-value epi.
-    s_hat: int
+    s_hat : int
        The current scanline s to sample for.
-    M: numpy.array [u] boolean.
+    M : numpy.array [u] boolean.
        Mask which values to consider.
-    h: float
+    h : float
         A bandwidth parameter for the kernel function.
     NOISEFREE: boolean, optional
         Improve performance of noise-free EPIs.
 
     Returns
     ----------
-    S_norm: numpy.array [u,d]
+    S_norm : numpy.array [u,d]
         The calculated scores for each sampled radiance at each pixel u.
-    R_bar: numpy.array [u,d].
+    R_bar : numpy.array [u,d].
         The updated convergence radiance for each EPI pixel.
     """
 
@@ -95,12 +95,12 @@ def epanechnikov_kernel(R, M, h):
 
     Parameters
     ----------
-    R: numpy.array [u,d,s]
+    R : numpy.array [u,d,s]
        The set of sampled radiances. For each pixel u and disparity d the gray
        value for each scanline s is stored.
-    M: numpy.array [u] boolean.
+    M : numpy.array [u] boolean.
        Mask which values to consider.
-    h: float
+    h : float
         A bandwidth parameter for the kernel function.
 
     Returns
@@ -135,21 +135,21 @@ def calc_r_bar_iter(R_bar, R, M, h, n_iter=10):
 
     Parameters
     ----------
-    R_bar: numpy.array [u,d].
+    R_bar : numpy.array [u,d]
         The updated convergence radiance for each EPI pixel.
-    R: numpy.array [u,d,s]
+    R : numpy.array [u,d,s]
        The set of sampled radiances. For each pixel u and disparity d the gray
        value for each scanline s is stored.
-    M: numpy.array [u] boolean.
+    M : numpy.array [u] boolean.
         Mask which values to consider.
-    h: float
+    h : float
         A bandwidth parameter for the kernel function.
-    n_iter: int, optional
+    n_iter : int, optional
         The number of iterations for the convergence calculation.
 
     Returns
     ----------
-    R_bar: numpy.array [u,d].
+    R_bar : numpy.array [u,d]
         The updated convergence radiance for each EPI pixel.
     """
 
@@ -207,14 +207,14 @@ def tile_R_bar(R_bar, s_dim):
 
     Parameters
     ----------
-    R_bar: numpy.array [u,d].
+    R_bar : numpy.array [u,d]
         The updated convergence radiance for each EPI pixel.
-    s_dim: int
+    s_dim : int
         The dimension of the s-axis.
 
     Returns
     ----------
-    R_bar_tiled: numpy.array [u,d, s].
+    R_bar_tiled : numpy.array [u,d, s]
         The extended R_bar array.
     """
 
@@ -237,14 +237,14 @@ def sum_along_s_axis(kernel_output, M):
 
     Parameters
     ----------
-    kernel_output: numpy.array [u,d,s].
+    kernel_output : numpy.array [u,d,s]
         Float values between 0 and 1 which 1 being the highest score possible.
-    M: numpy.array [u] boolean.
+    M : numpy.array [u] boolean
        Mask which values to consider.
 
     Returns
     ----------
-    kernel_sum: numpy.array [u,d]
+    kernel_sum : numpy.array [u,d]
         The sum of the kernel values over s dimension.
     """
 

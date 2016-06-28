@@ -25,23 +25,25 @@ def estimate_disp(D, S, M, R_bar, disp_range):
 
     Parameters
     ----------
-    D: numpy.array [u].
+    D : numpy.array [u].
         Already calculated disparities.
-    S: numpy.array [u,d]
+    S : numpy.array [u,d]
         The calculated scores for each sampled radiance at each pixel u.
-    M: numpy.array [u] boolean.
+    M : numpy.array [u] boolean.
        Mask which values to consider.
-    R_bar: numpy.array [u,d].
+    R_bar : numpy.array [u,d].
         The updated convergence radiance for each EPI pixel.
-    disp_range: numpy.array [d].
+    disp_range : numpy.array [d].
         The range of disparities used during the sampling.
 
     Returns
     ----------
-    D: numpy.array [u].
+    D : numpy.array [u]
         The updated estimated disparities for each u at the current s-dimension.
-    R_bar_best: numpy.array [u].
+    R_bar_best : numpy.array [u].
         The best updated convergence radiance for each EPI pixel.
+    S_argmax : numpy.array [u]
+        The index of the maximal score.
     """
 
     u_dim = S.shape[0]
@@ -78,7 +80,7 @@ def bilateral_median(Ds, epis, M, Me, window=11, threshold=0.1):
 
     Parameters
     ----------
-    Ds: numpy.array [v,u].
+    Ds : numpy.array [v,u].
         The set of already calculated disparities for each EPI at one scanline.
     epi : numpy.array [v,u]
         Set of all gray-value epis for one scanline.
@@ -159,7 +161,7 @@ def bilateral_median_inner(Ds_padded, epis_padded, Me_padded, M, v_u_dim,
 
     Parameters
     ----------
-     Ds_padded: numpy.array [v+window,u+window].
+     Ds_padded : numpy.array [v+window,u+window].
         The set of already calculated disparities for each EPI at one scanline.
         The array was extended to avoid border problems.
     epis_padded : numpy.array [v+window,u+window]
@@ -230,13 +232,13 @@ def propagation(Ds, epi, R_bar_best, s_hat, threshold=0.1, DEBUG=False):
 
     Parameters
     ----------
-    Ds: numpy.array [v,s,u].
+    Ds : numpy.array [v,s,u]
         The set of already calculated disparities for each EPI.
     epi : numpy.array [v,s,u]
         Set of all gray-value epis.
-    R_bar_best: numpy.array [u].
+    R_bar_best : numpy.array [u]
         The best updated convergence radiance for each EPI pixel.
-    s_hat: int
+    s_hat : int
        The current scanline s to sample for.
     threshold : float, optional
         The threshold for the filter to determine if two EPI pixels are
@@ -246,9 +248,9 @@ def propagation(Ds, epi, R_bar_best, s_hat, threshold=0.1, DEBUG=False):
 
     Returns
     ----------
-    Ds: numpy.array [v,s,u].
+    Ds : numpy.array [v,s,u.
         The propagated disparities.
-    plots: ndarray [v,s,u] or None.
+    plots : ndarray [v,s,u]
         If plotting was enabled epis with markings of the propagation process.
     """
 
@@ -279,27 +281,27 @@ def propagation_inner(Ds, epi, R_bar_best, s_hat, threshold, plots, DEBUG=False)
 
     Parameters
     ----------
-    Ds: numpy.array [v,s,u].
+    Ds : numpy.array [v,s,u]
         The set of already calculated disparities for each EPI.
     epi : numpy.array [v,s,u]
         Set of all gray-value epis.
-    R_bar_best: numpy.array [u].
+    R_bar_best : numpy.array [u]
         The best updated convergence radiance for each EPI pixel.
     s_hat: int
        The current scanline s to sample for.
     threshold : float, optional
         The threshold for the filter to determine if two EPI pixels are
         regarded as similar.
-    plots: numpy.array [d,s,u].
+    plots : numpy.array [d,s,u]
         If plotting was enabled epis to mark on the sampling process.
-    DEBUG: boolean, optional
+    DEBUG : boolean, optional
         Enable plotting to visualize the propagation process
 
     Returns
     ----------
-    Ds: numpy.array [v,s,u].
+    Ds: numpy.array [v,s,u]
         The propagated disparities.
-    plots: ndarray [v,s,u] or None.
+    plots: ndarray [v,s,u]
         If plotting was enabled epis with markings of the propagation process.
     """
 
