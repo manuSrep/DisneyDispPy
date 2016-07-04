@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>DisneyDisp package &mdash; DisneyDispPy 0.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="DisneyDispPy 0.1.1 documentation" href="index.html" />
+    <link rel="prev" title="Welcome to DisneyDispPy’s documentation!" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="disneydisp-package">
+<h1>DisneyDisp package<a class="headerlink" href="#disneydisp-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-DisneyDisp.clif2lf">
+<span id="disneydisp-clif2lf-module"></span><h2>DisneyDisp.clif2lf module<a class="headerlink" href="#module-DisneyDisp.clif2lf" title="Permalink to this headline">¶</a></h2>
+<p>Disney Disparity.
+:author: Manuel Tuschen
+:date: 24.06.2016
+:license: GPL3</p>
+<dl class="function">
+<dt id="DisneyDisp.clif2lf.clif2lf">
+<code class="descclassname">DisneyDisp.clif2lf.</code><code class="descname">clif2lf</code><span class="sig-paren">(</span><em>clif_file</em>, <em>lf_file</em>, <em>clif_group</em>, <em>lf_group='lightfiled'</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.clif2lf.clif2lf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a standard .clif file to an .hdf5 lightfield file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>clif_file</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The .clif filename including the directory.</li>
+<li><strong>lf_file</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The filename (including the directory) of the output .hdf5 lightfield.</li>
+<li><strong>clif_group</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The container name inside the .clif file.</li>
+<li><strong>lf_group</strong> (<em>string, optional</em>) &#8211; The container name inside the .hdf5 file for the lightfield.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-DisneyDisp.dmap2hdf5">
+<span id="disneydisp-dmap2hdf5-module"></span><h2>DisneyDisp.dmap2hdf5 module<a class="headerlink" href="#module-DisneyDisp.dmap2hdf5" title="Permalink to this headline">¶</a></h2>
+<p>Disney Disparity.
+:author: Manuel Tuschen
+:date: 24.06.2016
+:license: GPL3</p>
+<dl class="function">
+<dt id="DisneyDisp.dmap2hdf5.dmap2hdf5">
+<code class="descclassname">DisneyDisp.dmap2hdf5.</code><code class="descname">dmap2hdf5</code><span class="sig-paren">(</span><em>input_dir</em>, <em>output_file</em>, <em>output_dataset='disparities'</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.dmap2hdf5.dmap2hdf5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert results from .dmap files into .hdf5 file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>input_dir</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The directory where the .dmap files are located.</li>
+<li><strong>output_file</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The filename  (including the directory), of the output file.</li>
+<li><strong>output_dataset</strong> (<em>string, optional</em>) &#8211; The new container name of the hdf5 file.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-DisneyDisp.imgs2lf">
+<span id="disneydisp-imgs2lf-module"></span><h2>DisneyDisp.imgs2lf module<a class="headerlink" href="#module-DisneyDisp.imgs2lf" title="Permalink to this headline">¶</a></h2>
+<p>Disney Disparity.
+:author: Manuel Tuschen
+:date: 24.06.2016
+:license: GPL3</p>
+<dl class="function">
+<dt id="DisneyDisp.imgs2lf.imgs2lf">
+<code class="descclassname">DisneyDisp.imgs2lf.</code><code class="descname">imgs2lf</code><span class="sig-paren">(</span><em>input_dir</em>, <em>output_file</em>, <em>output_dataset='lightfield'</em>, <em>img_extension='.png'</em>, <em>dtype=&lt;class 'numpy.uint8'&gt;</em>, <em>RGB=True</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.imgs2lf.imgs2lf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert several images to a lightfield.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>input_dir</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The directory where the ligthfield images are located.</li>
+<li><strong>output_file</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The filename  (including the directory), of the output file.</li>
+<li><strong>output_dataset</strong> (<em>string, optional</em>) &#8211; The new container name of the hdf5 file.</li>
+<li><strong>img_extension</strong> (<em>string, optional</em>) &#8211; The file extension of the images to look for.</li>
+<li><strong>dtype</strong> (<em>numpy.dtype, optional</em>) &#8211; The new data type for the downscaled lightfield. Must be either
+np.float64, np.uint8 or np.uint16.</li>
+<li><strong>RGB</strong> (<em>bool, optional</em>) &#8211; If True, the output lightfield will be converted to RGB (default).
+Otherwise gray type images are stored.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-DisneyDisp.lf2epi">
+<span id="disneydisp-lf2epi-module"></span><h2>DisneyDisp.lf2epi module<a class="headerlink" href="#module-DisneyDisp.lf2epi" title="Permalink to this headline">¶</a></h2>
+<p>Disney Disparity.
+:author: Manuel Tuschen
+:date: 24.06.2016
+:license: GPL3</p>
+<dl class="function">
+<dt id="DisneyDisp.lf2epi.calculate_resolutions">
+<code class="descclassname">DisneyDisp.lf2epi.</code><code class="descname">calculate_resolutions</code><span class="sig-paren">(</span><em>r0_v</em>, <em>r0_u</em>, <em>red_fac=2</em>, <em>min_res=11</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.lf2epi.calculate_resolutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a list of downsampled resolutions (v,u) by reducing the initial
+resolution by a constant factor for each dimension up to a minimal
+resolution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>r0_v</strong> (<em>uint16</em>) &#8211; The initial resolution in v-dimension.</li>
+<li><strong>r0_u</strong> (<em>uint16</em>) &#8211; The initial resolution in u-dimension.</li>
+<li><strong>red_fac</strong> (<em>uint , optional</em>) &#8211; The reduction factor used for down sampling. Default is to halve the
+resolution each time.</li>
+<li><strong>min_res</strong> (<em>uint16.</em>) &#8211; The minimal resolution to sample to. The program will stop when either u
+or v reach min_res.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Each entry is a tuple (u,v) of resolutions.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array_like</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="DisneyDisp.lf2epi.create_epis">
+<code class="descclassname">DisneyDisp.lf2epi.</code><code class="descname">create_epis</code><span class="sig-paren">(</span><em>lf_in</em>, <em>epi_out</em>, <em>hdf5_group_in</em>, <em>hdf5_group_out='epis'</em>, <em>dtype=&lt;class 'numpy.float64'&gt;</em>, <em>RGB=True</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.lf2epi.create_epis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create epis for all resolutions given by the input lightfield.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lf_in</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The input hdf5 filename (including the directory) of the lightfield.</li>
+<li><strong>epi_out</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The output hdf5 filename (including the directory) of the lightfield
+in all resolutions.</li>
+<li><strong>hdf5_group_in</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The container name inside the hdf5 file for the lightfield. The same
+name will be used for the new file.</li>
+<li><strong>hdf5_group_out</strong> (<em>string, optional</em>) &#8211; The container name inside the hdf5 file for the epis.</li>
+<li><strong>dtype</strong> (<em>numpy.dtype, optional</em>) &#8211; The new data type for the epis. Must be either
+np.float64, np.uint8 or np.uint16.</li>
+<li><strong>RGB</strong> (<em>bool, optional</em>) &#8211; If True, the output epis will be converted to RGB (default).
+Otherwise gray type images are stored.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="DisneyDisp.lf2epi.downsample_lightfield">
+<code class="descclassname">DisneyDisp.lf2epi.</code><code class="descname">downsample_lightfield</code><span class="sig-paren">(</span><em>lf_in</em>, <em>lf_out</em>, <em>hdf5_group</em>, <em>r_all</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.lf2epi.downsample_lightfield" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduces the dimension of the input lightfield to the values given.
+Results are stored in a new hdf5 file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lf_in</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The input hdf5 filename (including the directory) of the lightfield.</li>
+<li><strong>lf_out</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The output hdf5 filename (including the directory) of the lightfield
+in all resolutions.</li>
+<li><strong>hdf5_group</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The container name inside the hdf5 file for the lightfield. The same
+name will be used for the new file.</li>
+<li><strong>r_all</strong> (<em>array_like</em>) &#8211; All resolutions to create. Each entry is a tuple (u,v) of resolutions.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-DisneyDisp">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-DisneyDisp" title="Permalink to this headline">¶</a></h2>
+<p>DisneyDisp.
+:author: Manuel Tuschen
+:date: 24.06.2016
+:license: GPL3</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">DisneyDisp package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-DisneyDisp.clif2lf">DisneyDisp.clif2lf module</a></li>
+<li><a class="reference internal" href="#module-DisneyDisp.dmap2hdf5">DisneyDisp.dmap2hdf5 module</a></li>
+<li><a class="reference internal" href="#module-DisneyDisp.imgs2lf">DisneyDisp.imgs2lf module</a></li>
+<li><a class="reference internal" href="#module-DisneyDisp.lf2epi">DisneyDisp.lf2epi module</a></li>
+<li><a class="reference internal" href="#module-DisneyDisp">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to DisneyDispPy&#8217;s documentation!</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/DisneyDisp.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Marcel Gutsche, Manuel Tuschen.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/DisneyDisp.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

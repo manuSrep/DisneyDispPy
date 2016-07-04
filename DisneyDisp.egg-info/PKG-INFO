@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: DisneyDisp
+Version: 0.1
+Summary: A python implementation of the "Scene Reconstruction from High Spatio-Angular Resolution Light Fields". For more information see https://www.disneyresearch.com/project/lightfields/.
+Home-page: https://github.com/manuSrep/DisneyDispPy.git
+Author: Marcel Gutsche, Manuel Tuschen
+Author-email: Manuel_Tuschen@web.de
+License: GPL3 License
+Description: UNKNOWN
+Platform: UNKNOWN
