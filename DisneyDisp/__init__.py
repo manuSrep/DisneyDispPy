@@ -4,7 +4,7 @@
 """
 DisneyDisp.
 :author: Manuel Tuschen
-:date: 24.06.2016
+:date: 04.07.2016
 :license: GPL3
 """
 
@@ -22,5 +22,5 @@ from ._score import *
 from ._disparity import *
 from ._process_epi import *
 from ._scale import *
-#from .disney import *
+from .disney import *
 

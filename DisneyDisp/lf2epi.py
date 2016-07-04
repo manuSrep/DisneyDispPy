@@ -4,7 +4,7 @@
 """
 Disney Disparity.
 :author: Manuel Tuschen
-:date: 24.06.2016
+:date: 20.06.2016
 :license: GPL3
 """
 
@@ -47,7 +47,7 @@ def calculate_resolutions(r0_v, r0_u, red_fac=2, min_res=11):
         or v reach min_res.
 
     Returns
-    ----------
+    -------
     array_like
         Each entry is a tuple (u,v) of resolutions.
     """

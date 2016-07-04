@@ -4,7 +4,7 @@
 """
 Disney Disparity.
 :author: Manuel Tuschen
-:date: 24.06.2016
+:date: 20.06.2016
 :license: GPL3
 """
 
@@ -37,7 +37,7 @@ def score_computation(R, epi, s_hat, M, h=0.02, NOISEFREE=False):
         Improve performance of noise-free EPIs.
 
     Returns
-    ----------
+    -------
     S_norm : numpy.array [u,d]
         The calculated scores for each sampled radiance at each pixel u.
     R_bar : numpy.array [u,d].
@@ -104,7 +104,7 @@ def epanechnikov_kernel(R, M, h):
         A bandwidth parameter for the kernel function.
 
     Returns
-    ----------
+    -------
     kernel_val: numpy.array  [u,d,s].
         Float values between 0 and 1 which 1 being the highest score possible.
     """
@@ -148,7 +148,7 @@ def calc_r_bar_iter(R_bar, R, M, h, n_iter=10):
         The number of iterations for the convergence calculation.
 
     Returns
-    ----------
+    -------
     R_bar : numpy.array [u,d]
         The updated convergence radiance for each EPI pixel.
     """
@@ -213,7 +213,7 @@ def tile_R_bar(R_bar, s_dim):
         The dimension of the s-axis.
 
     Returns
-    ----------
+    -------
     R_bar_tiled : numpy.array [u,d, s]
         The extended R_bar array.
     """
@@ -243,7 +243,7 @@ def sum_along_s_axis(kernel_output, M):
        Mask which values to consider.
 
     Returns
-    ----------
+    -------
     kernel_sum : numpy.array [u,d]
         The sum of the kernel values over s dimension.
     """

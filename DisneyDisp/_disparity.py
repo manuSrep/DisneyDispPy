@@ -4,7 +4,7 @@
 """
 Disney Disparity.
 :author: Manuel Tuschen
-:date: 24.06.2016
+:date: 20.06.2016
 :license: GPL3
 """
 
@@ -37,7 +37,7 @@ def estimate_disp(D, S, M, R_bar, disp_range):
         The range of disparities used during the sampling.
 
     Returns
-    ----------
+    -------
     D : numpy.array [u]
         The updated estimated disparities for each u at the current s-dimension.
     R_bar_best : numpy.array [u].
@@ -97,7 +97,7 @@ def bilateral_median(Ds, epis, M, Me, window=11, threshold=0.1):
         regarded as similar.
 
     Returns
-    ----------
+    -------
     Ds: numpy.array [v,u].
         The smoothed disparities at the current s-dimension.
     """
@@ -182,7 +182,7 @@ def bilateral_median_inner(Ds_padded, epis_padded, Me_padded, M, v_u_dim,
         regarded as similar.
 
     Returns
-    ----------
+    -------
     smoothed_Ds: numpy.array [v,u].
         The smoothed disparities at the current s-dimension.
     """
@@ -247,7 +247,7 @@ def propagation(Ds, epi, R_bar_best, s_hat, threshold=0.1, DEBUG=False):
         Enable plotting to visualize the propagation process
 
     Returns
-    ----------
+    -------
     Ds : numpy.array [v,s,u.
         The propagated disparities.
     plots : ndarray [v,s,u]
@@ -298,7 +298,7 @@ def propagation_inner(Ds, epi, R_bar_best, s_hat, threshold, plots, DEBUG=False)
         Enable plotting to visualize the propagation process
 
     Returns
-    ----------
+    -------
     Ds: numpy.array [v,s,u]
         The propagated disparities.
     plots: ndarray [v,s,u]

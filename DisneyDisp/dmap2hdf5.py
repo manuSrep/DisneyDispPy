@@ -4,7 +4,7 @@
 """
 Disney Disparity.
 :author: Manuel Tuschen
-:date: 24.06.2016
+:date: 20.06.2016
 :license: GPL3
 """
 

@@ -4,7 +4,7 @@
 """
 Disney Disparity.
 :author: Manuel Tuschen
-:date: 24.06.2016
+:date: 20.06.2016
 :license: GPL3
 """
 
@@ -81,7 +81,7 @@ def process_epi(epi, D, Ce, M, s_hat, min_disp, max_disp, stepsize, Cd_t,
         The range of disparities used during the sampling.
 
     Returns
-    ----------
+    -------
     D : numpy.array [u]
         The updated estimated disparities for each u at the current s-dimension.
     R_bar : numpy.array [u]

@@ -4,7 +4,7 @@
 """
 Disney Disparity.
 :author: Manuel Tuschen
-:date: 24.06.2016
+:date: 20.06.2016
 :license: GPL3
 """
 
@@ -27,7 +27,7 @@ def fine_to_course(D, course_res):
         The v,u dimension of the courser resolution.
 
     Returns
-    ----------
+    -------
     D_ : numpy.array [v_,s,u_,]
         The update disparities for the courser resolution.
     """
@@ -64,7 +64,7 @@ def course_to_fine(D_epi_fine, D_epi_course):
         Disparity estimates at the courser resolution.
 
     Returns
-    ----------
+    -------
     D_epi_fine : numpy.array [v,s,u]
         Updated disparity estimates at the finer resolution.
     """

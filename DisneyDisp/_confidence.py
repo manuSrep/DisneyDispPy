@@ -4,7 +4,7 @@
 """
 Disney Disparity.
 :author: Manuel Tuschen
-:date: 24.06.2016
+:date: 20.06.2016
 :license: GPL3
 """
 
@@ -40,7 +40,7 @@ def edge_confidence(epi, window=9, threshold=0.02):
         must be overcome to designate an edge.
 
     Returns
-    ----------
+    -------
     Ce : numpy.array [v,u]
          Edge confidence values for each EPI pixel.
     Me : numpy.array [v,u] of boolean.
@@ -103,7 +103,7 @@ def disparity_confidence(S, Ce, threshold=0.1):
         The threshold which must be overcome for the depth confidence.
 
     Returns
-    ----------
+    -------
     Cd :  numpy.array [u]
          The calculated confidence values for each pixel.
     Md : numpy.array [u] of boolean.

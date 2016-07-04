@@ -4,7 +4,7 @@
 """
 Disney Disparity.
 :author: Manuel Tuschen
-:date: 24.06.2016
+:date: 20.06.2016
 :license: GPL3
 """
 
@@ -33,7 +33,7 @@ def find_disp_bounds(Disps, min_disp, max_disp, stepsize):
         The stepsize used during the sampling procedure.
 
     Returns
-    ----------
+    -------
     DB : numpy.array [u,2]
         The estimated disparity bounds for each u at line s in each EPI.
     """
@@ -117,7 +117,7 @@ def sample_radiance(epi, s_hat, min_disp, max_disp, stepsize, DB, M, DEBUG=False
         Enable plotting to visualize the sampling process
 
     Returns
-    ----------
+    -------
     R : numpy.array [u,d,s]
         The set of sampled radiances. For each pixel u and disparity d the gray
         value for each scanline s is stored.
@@ -183,7 +183,7 @@ def sample_radiance_inner(epi, s_hat, disp_range, DB, M, plots, DEBUG=False):
         Enable plotting to visualize the sampling process
 
     Returns
-    ----------
+    -------
     R : numpy.array [u,d,s]
         The set of sampled radiances. For each pixel u and disparity d the gray
         value for each scanline s is stored.
