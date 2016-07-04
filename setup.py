@@ -9,4 +9,6 @@ setup(name='DisneyDisp',
       license='GPL3 License',
       packages=['DisneyDisp'],
       install_requires=["scipy","numpy","scikit-image","matplotlib","numba","h5py","progressbar2","easyScripting"],
-      zip_safe=False)
+      zip_safe=False,
+      scripts=['clif2lf', 'dmap2hdf5', 'imgs2lf', 'lf2epi', 'disney']
+      )

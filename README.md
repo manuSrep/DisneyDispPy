@@ -15,8 +15,25 @@ This is a python implementation of "Scene Reconstruction from High Spatio-Angula
  ```  
 
 
+## How to use
+After intallation you can use the following command line tools directly:
+
+```
+disney
+imgs2lf
+lf2epi
+dmap2hdf5
+clif2lf
+```
+
+Just type ```command --help``` for more information. For more information on our API, please visit the [documentation](https://manusrep.github.io/DisneyDispPy/):
+
+## Liscense
+The programm, all code and documentation is released under the  GNU General Public License Version 3.0 (GPL3). For more information see <http://www.gnu.org/licenses/>.
+
+
 ## Issues
-Please, feel free to contribute in any way, e.g. in reporting bugs, contributing code or making sugestions for improvements. Preferable use gitHub's "pull requests" but you can also contact me directly: Manuel_Tuschen@web.de.
+Please, feel free to contribute in any way, e.g. in reporting bugs, contributing code or making sugestions for improvements. Preferable use gitHub's "Issues" and "Pull requests" but you can also contact me directly via Manuel_Tuschen@web.de.
 
 ## Release Notes
 
