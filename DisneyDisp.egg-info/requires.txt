@@ -1,8 +1,0 @@
-scipy
-numpy
-scikit-image
-matplotlib
-numba
-h5py
-progressbar2
-easyScripting
