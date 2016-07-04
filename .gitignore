@@ -450,7 +450,7 @@ captures/
 /fuel/vendor
 
 # the fuelphp document
-/docs/
+#/docs/
 
 # you may install these packages with `oil package`.
 # http://fuelphp.com/docs/packages/oil/package.html
@@ -1378,7 +1378,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/
+#docs/_build/
 
 # PyBuilder
 target/
@@ -3323,7 +3323,7 @@ Cargo.lock
 .dub
 docs.json
 __dummy.html
-docs/
+#docs/
 
 # Code coverage
 *.lst
