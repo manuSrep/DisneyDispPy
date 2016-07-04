@@ -7,6 +7,6 @@ setup(name='DisneyDsip',
       author='Marcel Gutsche, Manuel Tuschen',
       author_email='Manuel_Tuschen@web.de',
       license='GPL3 License',
-      packages=['DisneyDsip'],
+      packages=['DisneyDisp'],
       install_requires=["scipy","numpy","scikit-image","matplotlib","numba","h5py","progressbar2","easyScripting"],
       zip_safe=False)
