@@ -1,6 +1,6 @@
 # README
 
-This is a python implementation of "Scene Reconstruction from High Spatio-Angular Resolution Light Fields" originally developed by "Disney research." [[1][]]. It enables disparity estimation of 3D lightfields by preserving fine details. For more details see also: <https://www.disneyresearch.com/project/lightfields/>  
+DisneyDisp is a free python implementation of *Scene Reconstruction from High Spatio-Angular Resolution Light Fields* originally developed by *Disney research*. [[1][]]. It enables disparity estimation of 3D lightfields by preserving fine details. For more details see also: <https://www.disneyresearch.com/project/lightfields/>  
 
 1. Kim, C., Zimmer, H., Pritch, Y., Sorkine-Hornung, A. & Gross, M., *Scene Reconstruction from High Spatio-Angular Resolution Light Fields*. ACM Transactions on Graphics 32, 1-12 (2013).
 [1]:https://s3-us-west-1.amazonaws.com/disneyresearch/wp-content/uploads/20140725221413/Kim13.pdf 

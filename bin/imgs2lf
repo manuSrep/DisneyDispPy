@@ -1,0 +1,45 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+
+"""
+:author: Manuel Tuschen
+:date: 20.06.2016
+:license: GPL3
+"""
+
+from __future__ import division, absolute_import, unicode_literals, print_function
+
+import argparse
+
+import numpy as np
+from DisneyDisp import imgs2lf
+
+
+
+
+################################################################################
+#                                                                              #
+#                       Can be used as a command line tool                     #
+#                                                                              #
+################################################################################
+
+parser = argparse.ArgumentParser(description='Store image files into hdf5 container.')
+
+parser.add_argument('input_dir', help='The directory where the lightfield images are located.')
+parser.add_argument('--output_file', help='The filename (including the directory) of the output .hdf5 file.', default='lightfield')
+parser.add_argument('--output_dataset', help='The container name in the hdf5 file.', default='lightfield')
+parser.add_argument('--img_extension', help='The file extension of the images to look for.', default='.png')
+parser.add_argument('--dtype', help='The dtype used to store the lightfild data.', choices=['float', 'uint', 'ubyte'], default='uint')
+parser.add_argument('-RGB', help='Flag to determine if resulting lightfield should consists of RGB values.', action='store_true')
+
+if __name__ == "__main__":
+
+    args = parser.parse_args()
+
+    type = np.float64
+    if args.dtype == 'ubyte':
+        type = np.uint8
+    if args.dtype == 'uint':
+        type = np.uint16
+
+    imgs2lf(args.input_dir, output_file=args.output_file, output_dataset=args.output_dataset, img_extension=args.img_extension, dtype=type, RGB=args.RGB)

@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 """
-Disney Disparity.
 :author: Manuel Tuschen
 :date: 20.06.2016
 :license: GPL3

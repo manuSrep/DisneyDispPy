@@ -1,0 +1,668 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>DisneyDisp package &mdash; DisneyDisp 0.1.10 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.10',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="DisneyDisp 0.1.10 documentation" href="index.html" />
+    <link rel="prev" title="Command line utitlites" href="clu.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="disneydisp-package">
+<h1>DisneyDisp package<a class="headerlink" href="#disneydisp-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-DisneyDisp.disparity">
+<span id="disneydisp-disparity"></span><h2>DisneyDisp.disparity<a class="headerlink" href="#module-DisneyDisp.disparity" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Manuel Tuschen</td>
+</tr>
+<tr class="field-even field"><th class="field-name">date:</th><td class="field-body">20.06.2016</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">license:</th><td class="field-body">GPL3</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="DisneyDisp.disparity.Disney">
+<em class="property">class </em><code class="descclassname">DisneyDisp.disparity.</code><code class="descname">Disney</code><span class="sig-paren">(</span><em>lightfield</em>, <em>lf_group</em>, <em>output_dir</em>, <em>working_dir='work_tmp/'</em>, <em>n_cpus=-1</em>, <em>r_start=None</em>, <em>s_hat=None</em>, <em>DEBUG=False</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.disparity.Disney" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>The class collecting all functionality and input parameters needed for the
+disparity calculation.</p>
+<dl class="method">
+<dt id="DisneyDisp.disparity.Disney.calculateDisp">
+<code class="descname">calculateDisp</code><span class="sig-paren">(</span><em>min_disp</em>, <em>max_disp</em>, <em>stepsize</em>, <em>Ce_t</em>, <em>Cd_t</em>, <em>S_t</em>, <em>NOISEFREE=False</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.disparity.Disney.calculateDisp" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main method to calculate the disparity estimates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>min_disp</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The minimal disparity to sample for.</li>
+<li><strong>max_disp</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The maximal disparity to sample for.</li>
+<li><strong>stepsize</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The stepsize used during the sampling procedure.</li>
+<li><strong>Ce_t</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The threshold for the edge confidence.</li>
+<li><strong>Cd_t</strong> (<em>float:</em>) &#8211; The threshold for the disparity confidence.</li>
+<li><strong>S_t</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The similarity threshold e.g. for the bilateral median filter.</li>
+<li><strong>NOISEFREE</strong> (<em>bool, optional</em>) &#8211; True means not to iteratively smooth the mean radiance. This should
+only be enabled for noisy data.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DisneyDisp.disparity.Disney.calculateMap">
+<code class="descname">calculateMap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.disparity.Disney.calculateMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the final disparity map for each s-dimension and save output
+into a hdf5 file container. In DEBUG mode lot&#8217;s of furhter plot&#8217;s are
+generated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DisneyDisp.disparity.Disney.generate_s_hat_order">
+<code class="descname">generate_s_hat_order</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.disparity.Disney.generate_s_hat_order" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a list with each entry being the next s-entry to work with.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><em>list</em></li>
+<li><em>A ordered list with the s-dimensions to go through.</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DisneyDisp.disparity.Disney.getCd">
+<code class="descname">getCd</code><span class="sig-paren">(</span><em>res</em>, <em>v=None</em>, <em>s=None</em>, <em>u=None</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.disparity.Disney.getCd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the required required disparity confidence data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>res</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; The current v- and u-dimension.</li>
+<li><strong>v</strong> (<em>int, optional</em>) &#8211; The only v-dimension to return.</li>
+<li><strong>s</strong> (<em>int, optional</em>) &#8211; The only s-dimension to return.</li>
+<li><strong>u</strong> (<em>int, optional</em>) &#8211; The only u-dimension to return.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The sub(data) requested.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.array [v,s,u]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DisneyDisp.disparity.Disney.getCe">
+<code class="descname">getCe</code><span class="sig-paren">(</span><em>res</em>, <em>v=None</em>, <em>s=None</em>, <em>u=None</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.disparity.Disney.getCe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the required required edge confidence data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>res</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; The current v- and u-dimension.</li>
+<li><strong>v</strong> (<em>int, optional</em>) &#8211; The only v-dimension to return.</li>
+<li><strong>s</strong> (<em>int, optional</em>) &#8211; The only s-dimension to return.</li>
+<li><strong>u</strong> (<em>int, optional</em>) &#8211; The only u-dimension to return.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The sub(data) requested.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.array [v,s,u]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DisneyDisp.disparity.Disney.getDBs">
+<code class="descname">getDBs</code><span class="sig-paren">(</span><em>res</em>, <em>v=None</em>, <em>s=None</em>, <em>u=None</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.disparity.Disney.getDBs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the required required disparity bound data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>res</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; The current v- and u-dimension.</li>
+<li><strong>v</strong> (<em>int, optional</em>) &#8211; The only v-dimension to return.</li>
+<li><strong>s</strong> (<em>int, optional</em>) &#8211; The only s-dimension to return.</li>
+<li><strong>u</strong> (<em>int, optional</em>) &#8211; The only u-dimension to return.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The sub(data) requested.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.array [v,s,u]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DisneyDisp.disparity.Disney.getDisp">
+<code class="descname">getDisp</code><span class="sig-paren">(</span><em>res</em>, <em>v=None</em>, <em>s=None</em>, <em>u=None</em>, <em>level=None</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.disparity.Disney.getDisp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the required required disparity data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>res</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; The current v- and u-dimension.</li>
+<li><strong>v</strong> (<em>int, optional</em>) &#8211; The only v-dimension to return.</li>
+<li><strong>s</strong> (<em>int, optional</em>) &#8211; The only s-dimension to return.</li>
+<li><strong>u</strong> (<em>int, optional</em>) &#8211; The only u-dimension to return.</li>
+<li><strong>level</strong> (<em>int, optional</em>) &#8211; Determine which disparity data to get in DEBUG mode.
+0) after refinement,
+1) raw data,
+2) after bilateral median,
+3) after confidence selection</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The sub(data) requested.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.array [v,s,u, (level)]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DisneyDisp.disparity.Disney.getEpi">
+<code class="descname">getEpi</code><span class="sig-paren">(</span><em>res</em>, <em>v=None</em>, <em>s=None</em>, <em>u=None</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.disparity.Disney.getEpi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the required epi data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>res</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; The current v- and u-dimension.</li>
+<li><strong>v</strong> (<em>int, optional</em>) &#8211; The only v-dimension to return.</li>
+<li><strong>s</strong> (<em>int, optional</em>) &#8211; The only s-dimension to return.</li>
+<li><strong>u</strong> (<em>int, optional</em>) &#8211; The only u-dimension to return.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The sub(data) requested.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.array [v,s,u]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DisneyDisp.disparity.Disney.getScore">
+<code class="descname">getScore</code><span class="sig-paren">(</span><em>res</em>, <em>v=None</em>, <em>s=None</em>, <em>u=None</em>, <em>level=None</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.disparity.Disney.getScore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the required required score data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>res</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; The current v- and u-dimension.</li>
+<li><strong>v</strong> (<em>int, optional</em>) &#8211; The only v-dimension to return.</li>
+<li><strong>s</strong> (<em>int, optional</em>) &#8211; The only s-dimension to return.</li>
+<li><strong>u</strong> (<em>int, optional</em>) &#8211; The only u-dimension to return.</li>
+<li><strong>level</strong> (<em>int, optional</em>) &#8211; Determine which score data to get in DEBUG mode.
+0) S_max,
+1) S_mean,
+2) S_argmax,</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The sub(data) requested.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.array [v,s,u, (level)]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DisneyDisp.disparity.Disney.initialize">
+<code class="descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.disparity.Disney.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load data from files or initialize if not available.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DisneyDisp.disparity.Disney.saveCd">
+<code class="descname">saveCd</code><span class="sig-paren">(</span><em>data</em>, <em>res</em>, <em>v=None</em>, <em>s=None</em>, <em>u=None</em>, <em>threshold=None</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.disparity.Disney.saveCd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the selected disparity confidence data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>numpy.array</em>) &#8211; The data to save.</li>
+<li><strong>res</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; The current v- and u-dimension.</li>
+<li><strong>v</strong> (<em>int, optional</em>) &#8211; The only v-dimension to return.</li>
+<li><strong>s</strong> (<em>int, optional</em>) &#8211; The only s-dimension to return.</li>
+<li><strong>u</strong> (<em>int, optional</em>) &#8211; The only u-dimension to return.</li>
+<li><strong>threshold</strong> (<em>float, optional</em>) &#8211; Confidence threshold for binary mask.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DisneyDisp.disparity.Disney.saveCe">
+<code class="descname">saveCe</code><span class="sig-paren">(</span><em>data</em>, <em>res</em>, <em>v=None</em>, <em>s=None</em>, <em>u=None</em>, <em>threshold=None</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.disparity.Disney.saveCe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the selected edge confidence data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>numpy.array</em>) &#8211; The data to save.</li>
+<li><strong>res</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; The current v- and u-dimension.</li>
+<li><strong>v</strong> (<em>int, optional</em>) &#8211; The only v-dimension to return.</li>
+<li><strong>s</strong> (<em>int, optional</em>) &#8211; The only s-dimension to return.</li>
+<li><strong>u</strong> (<em>int, optional</em>) &#8211; The only u-dimension to return.</li>
+<li><strong>threshold</strong> (<em>float, optional</em>) &#8211; Confidence threshold for binary mask.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DisneyDisp.disparity.Disney.saveDBs">
+<code class="descname">saveDBs</code><span class="sig-paren">(</span><em>data</em>, <em>res</em>, <em>v=None</em>, <em>s=None</em>, <em>u=None</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.disparity.Disney.saveDBs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the selected disparity bound data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>numpy.array</em>) &#8211; The data to save.</li>
+<li><strong>res</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; The current v- and u-dimension.</li>
+<li><strong>v</strong> (<em>int, optional</em>) &#8211; The only v-dimension to return.</li>
+<li><strong>s</strong> (<em>int, optional</em>) &#8211; The only s-dimension to return.</li>
+<li><strong>u</strong> (<em>int, optional</em>) &#8211; The only u-dimension to return.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DisneyDisp.disparity.Disney.saveDisp">
+<code class="descname">saveDisp</code><span class="sig-paren">(</span><em>data</em>, <em>res</em>, <em>v=None</em>, <em>s=None</em>, <em>u=None</em>, <em>level=None</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.disparity.Disney.saveDisp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the selected disparity data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>numpy.array</em>) &#8211; The data to save.</li>
+<li><strong>res</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; The current v- and u-dimension.</li>
+<li><strong>v</strong> (<em>int, optional</em>) &#8211; The only v-dimension to return.</li>
+<li><strong>s</strong> (<em>int, optional</em>) &#8211; The only s-dimension to return.</li>
+<li><strong>u</strong> (<em>int, optional</em>) &#8211; The only u-dimension to return.</li>
+<li><strong>level</strong> (<em>int, optional</em>) &#8211; Determine which disparity data to get in DEBUG mode.
+0) after refinement,
+1) raw data,
+2) after bilateral median,
+3) after confidence selection.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DisneyDisp.disparity.Disney.saveScore">
+<code class="descname">saveScore</code><span class="sig-paren">(</span><em>data</em>, <em>res</em>, <em>v=None</em>, <em>s=None</em>, <em>u=None</em>, <em>level=0</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.disparity.Disney.saveScore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the selected score data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>numpy.array</em>) &#8211; The data to save.</li>
+<li><strong>res</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; The current v- and u-dimension.</li>
+<li><strong>v</strong> (<em>int, optional</em>) &#8211; The only v-dimension to return.</li>
+<li><strong>s</strong> (<em>int, optional</em>) &#8211; The only s-dimension to return.</li>
+<li><strong>u</strong> (<em>int, optional</em>) &#8211; The only u-dimension to return.</li>
+<li><strong>level</strong> (<em>int, optional</em>) &#8211; Determine which disparity data to get in DEBUG mode.
+0) S_max,
+1) S_mean,
+2) S_argmax,</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-DisneyDisp.imgs2lf">
+<span id="disneydisp-imgs2lf"></span><h2>DisneyDisp.imgs2lf<a class="headerlink" href="#module-DisneyDisp.imgs2lf" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Manuel Tuschen</td>
+</tr>
+<tr class="field-even field"><th class="field-name">date:</th><td class="field-body">20.06.2016</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">license:</th><td class="field-body">GPL3</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="DisneyDisp.imgs2lf.imgs2lf">
+<code class="descclassname">DisneyDisp.imgs2lf.</code><code class="descname">imgs2lf</code><span class="sig-paren">(</span><em>input_dir</em>, <em>output_file</em>, <em>output_dataset='lightfield'</em>, <em>img_extension='.png'</em>, <em>dtype=&lt;class 'numpy.uint8'&gt;</em>, <em>RGB=True</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.imgs2lf.imgs2lf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert several images to a lightfield.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>input_dir</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The directory where the ligthfield images are located.</li>
+<li><strong>output_file</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The filename  (including the directory), of the output file.</li>
+<li><strong>output_dataset</strong> (<em>string, optional</em>) &#8211; The new container name of the hdf5 file.</li>
+<li><strong>img_extension</strong> (<em>string, optional</em>) &#8211; The file extension of the images to look for.</li>
+<li><strong>dtype</strong> (<em>numpy.dtype, optional</em>) &#8211; The new data type for the downscaled lightfield. Must be either
+np.float64, np.uint8 or np.uint16.</li>
+<li><strong>RGB</strong> (<em>bool, optional</em>) &#8211; If True, the output lightfield will be converted to RGB (default).
+Otherwise gray type images are stored.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-DisneyDisp.lf2epi">
+<span id="disneydisp-lf2epi"></span><h2>DisneyDisp.lf2epi<a class="headerlink" href="#module-DisneyDisp.lf2epi" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Manuel Tuschen</td>
+</tr>
+<tr class="field-even field"><th class="field-name">date:</th><td class="field-body">20.06.2016</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">license:</th><td class="field-body">GPL3</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="DisneyDisp.lf2epi.calculate_resolutions">
+<code class="descclassname">DisneyDisp.lf2epi.</code><code class="descname">calculate_resolutions</code><span class="sig-paren">(</span><em>r0_v</em>, <em>r0_u</em>, <em>red_fac=2</em>, <em>min_res=11</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.lf2epi.calculate_resolutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a list of downsampled resolutions (v,u) by reducing the initial
+resolution by a constant factor for each dimension up to a minimal
+resolution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>r0_v</strong> (<em>uint16</em>) &#8211; The initial resolution in v-dimension.</li>
+<li><strong>r0_u</strong> (<em>uint16</em>) &#8211; The initial resolution in u-dimension.</li>
+<li><strong>red_fac</strong> (<em>uint , optional</em>) &#8211; The reduction factor used for down sampling. Default is to halve the
+resolution each time.</li>
+<li><strong>min_res</strong> (<em>uint16.</em>) &#8211; The minimal resolution to sample to. The program will stop when either u
+or v reach min_res.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Each entry is a tuple (u,v) of resolutions.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array_like</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="DisneyDisp.lf2epi.create_epis">
+<code class="descclassname">DisneyDisp.lf2epi.</code><code class="descname">create_epis</code><span class="sig-paren">(</span><em>lf_in</em>, <em>epi_out</em>, <em>hdf5_group_in</em>, <em>hdf5_group_out='epis'</em>, <em>dtype=&lt;class 'numpy.float64'&gt;</em>, <em>RGB=True</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.lf2epi.create_epis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create epis for all resolutions given by the input lightfield.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lf_in</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The input hdf5 filename (including the directory) of the lightfield.</li>
+<li><strong>epi_out</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The output hdf5 filename (including the directory) of the lightfield
+in all resolutions.</li>
+<li><strong>hdf5_group_in</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The container name inside the hdf5 file for the lightfield. The same
+name will be used for the new file.</li>
+<li><strong>hdf5_group_out</strong> (<em>string, optional</em>) &#8211; The container name inside the hdf5 file for the epis.</li>
+<li><strong>dtype</strong> (<em>numpy.dtype, optional</em>) &#8211; The new data type for the epis. Must be either
+np.float64, np.uint8 or np.uint16.</li>
+<li><strong>RGB</strong> (<em>bool, optional</em>) &#8211; If True, the output epis will be converted to RGB (default).
+Otherwise gray type images are stored.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="DisneyDisp.lf2epi.downsample_lightfield">
+<code class="descclassname">DisneyDisp.lf2epi.</code><code class="descname">downsample_lightfield</code><span class="sig-paren">(</span><em>lf_in</em>, <em>lf_out</em>, <em>hdf5_group</em>, <em>r_all</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.lf2epi.downsample_lightfield" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduces the dimension of the input lightfield to the values given.
+Results are stored in a new hdf5 file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lf_in</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The input hdf5 filename (including the directory) of the lightfield.</li>
+<li><strong>lf_out</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The output hdf5 filename (including the directory) of the lightfield
+in all resolutions.</li>
+<li><strong>hdf5_group</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The container name inside the hdf5 file for the lightfield. The same
+name will be used for the new file.</li>
+<li><strong>r_all</strong> (<em>array_like</em>) &#8211; All resolutions to create. Each entry is a tuple (u,v) of resolutions.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-DisneyDisp.clif2lf">
+<span id="disneydisp-clif2lf"></span><h2>DisneyDisp.clif2lf<a class="headerlink" href="#module-DisneyDisp.clif2lf" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Manuel Tuschen</td>
+</tr>
+<tr class="field-even field"><th class="field-name">date:</th><td class="field-body">20.06.2016</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">license:</th><td class="field-body">GPL3</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="DisneyDisp.clif2lf.clif2lf">
+<code class="descclassname">DisneyDisp.clif2lf.</code><code class="descname">clif2lf</code><span class="sig-paren">(</span><em>clif_file</em>, <em>lf_file</em>, <em>clif_group</em>, <em>lf_group='lightfiled'</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.clif2lf.clif2lf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a standard .clif file to an .hdf5 lightfield file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>clif_file</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The .clif filename including the directory.</li>
+<li><strong>lf_file</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The filename (including the directory) of the output .hdf5 lightfield.</li>
+<li><strong>clif_group</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The container name inside the .clif file.</li>
+<li><strong>lf_group</strong> (<em>string, optional</em>) &#8211; The container name inside the .hdf5 file for the lightfield.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-DisneyDisp.dmap2hdf5">
+<span id="disneydisp-dmap2hdf5"></span><h2>DisneyDisp.dmap2hdf5<a class="headerlink" href="#module-DisneyDisp.dmap2hdf5" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Manuel Tuschen</td>
+</tr>
+<tr class="field-even field"><th class="field-name">date:</th><td class="field-body">20.06.2016</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">license:</th><td class="field-body">GPL3</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="DisneyDisp.dmap2hdf5.dmap2hdf5">
+<code class="descclassname">DisneyDisp.dmap2hdf5.</code><code class="descname">dmap2hdf5</code><span class="sig-paren">(</span><em>input_dir</em>, <em>output_file</em>, <em>output_dataset='disparities'</em><span class="sig-paren">)</span><a class="headerlink" href="#DisneyDisp.dmap2hdf5.dmap2hdf5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert results from .dmap files into .hdf5 file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>input_dir</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The directory where the .dmap files are located.</li>
+<li><strong>output_file</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; The filename  (including the directory), of the output file.</li>
+<li><strong>output_dataset</strong> (<em>string, optional</em>) &#8211; The new container name of the hdf5 file.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">DisneyDisp package</a><ul>
+<li><a class="reference internal" href="#module-DisneyDisp.disparity">DisneyDisp.disparity</a></li>
+<li><a class="reference internal" href="#module-DisneyDisp.imgs2lf">DisneyDisp.imgs2lf</a></li>
+<li><a class="reference internal" href="#module-DisneyDisp.lf2epi">DisneyDisp.lf2epi</a></li>
+<li><a class="reference internal" href="#module-DisneyDisp.clif2lf">DisneyDisp.clif2lf</a></li>
+<li><a class="reference internal" href="#module-DisneyDisp.dmap2hdf5">DisneyDisp.dmap2hdf5</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="clu.html" title="previous chapter">Command line utitlites</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/disney.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Marcel Gutsche, Manuel Tuschen.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/disney.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

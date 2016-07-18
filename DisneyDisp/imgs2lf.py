@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 """
-Disney Disparity.
 :author: Manuel Tuschen
 :date: 20.06.2016
 :license: GPL3
@@ -115,18 +114,16 @@ def imgs2lf(input_dir, output_file, output_dataset='lightfield', img_extension =
 #                                                                              #
 ################################################################################
 
+parser = argparse.ArgumentParser(description='Store image files into hdf5 container.')
 
+parser.add_argument('input_dir', help='The directory where the lightfield images are located.')
+parser.add_argument('--output_file', help='The filename (including the directory) of the output .hdf5 file.', default='lightfield')
+parser.add_argument('--output_dataset', help='The container name in the hdf5 file.', default='lightfield')
+parser.add_argument('--img_extension', help='The file extension of the images to look for.', default='.png')
+parser.add_argument('--dtype', help='The dtype used to store the lightfild data.', choices=['float', 'uint', 'ubyte'], default='uint')
+parser.add_argument('-RGB', help='Flag to determine if resulting lightfield should consists of RGB values.', action='store_true')
 
 if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser(description='Store image files into hdf5 container.')
-
-    parser.add_argument('input_dir', help='The directory where the lightfield images are located.')
-    parser.add_argument('--output_file', help='The filename (including the directory) of the output .hdf5 file.', default='lightfield')
-    parser.add_argument('--output_dataset', help='The container name in the hdf5 file.', default='lightfield')
-    parser.add_argument('--img_extension', help='The file extension of the images to look for.', default='.png')
-    parser.add_argument('--dtype', help='The dtype used to store the lightfild data.', choices=['float', 'uint', 'ubyte'], default='uint')
-    parser.add_argument('-RGB', help='Flag to determine if resulting lightfield should consists of RGB values.', action='store_true')
 
     args = parser.parse_args()
 

@@ -1,8 +1,14 @@
 DisneyDisp package
 ==================
 
-Submodules
-----------
+DisneyDisp.disney module
+------------------------
+
+.. automodule:: DisneyDisp.disney
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 DisneyDisp.clif2lf module
 -------------------------
@@ -12,13 +18,7 @@ DisneyDisp.clif2lf module
     :undoc-members:
     :show-inheritance:
 
-DisneyDisp.disney module
-------------------------
 
-.. automodule:: DisneyDisp.disney
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 DisneyDisp.dmap2hdf5 module
 ---------------------------

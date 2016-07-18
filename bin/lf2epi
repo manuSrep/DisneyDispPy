@@ -1,0 +1,59 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+
+"""
+:author: Manuel Tuschen
+:date: 20.06.2016
+:license: GPL3
+"""
+
+from __future__ import division, absolute_import, unicode_literals, print_function
+
+import os
+import argparse
+
+import numpy as np
+import h5py
+
+from DisneyDisp import calculate_resolutions, downsample_lightfield, create_epis
+
+
+
+
+################################################################################
+#                                                                              #
+#                       Can be used as a command line tool                     #
+#                                                                              #
+################################################################################
+
+
+parser = argparse.ArgumentParser(description='Extract EPIs from a given lightfield and store them in a .hdf5 file.')
+
+parser.add_argument('lightfiled', help='The filename including the directory of the lightfield.')
+parser.add_argument('epis', help='The filename including the directory to save the EPI .hdf5 file.')
+parser.add_argument('--hdf5_group_lf', help='The group name inside hdf5 File.', default='lightfield')
+parser.add_argument('--hdf5_group_epi', help='The group name inside hdf5 File.', default='lightfield')
+parser.add_argument('--dtype', help='The dtype used to store the lightfild data.', choices=[np.float64, np.uint8, np.uint16],default=np.float64)
+parser.add_argument('-RGB',help='Flag to determine if resulting lightfield should consists of RGB values.',action='store_true')
+
+if __name__ == "__main__":
+
+    args = parser.parse_args()
+
+    lf = h5py.File(args.lightfiled, 'r')
+    r_all = calculate_resolutions(lf[args.h5path].shape[1], lf[args.h5path].shape[2])
+
+    downsample_lightfield(args.lightfiled, 'tmp.hdf5', args.hdf5_group_lf, r_all)
+    create_epis('tmp.hdf5', args.epi, args.hdf5_group_lf, hdf5_group_out=args.hdf5_group_epi, dtype=args.dtype, RGB=args.RGB)
+    os.remove('tmp.hdf5')
+
+
+
+
+
+
+
+
+
+
+

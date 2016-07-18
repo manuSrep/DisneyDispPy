@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 """
-Disney Disparity.
 :author: Manuel Tuschen
 :date: 20.06.2016
 :license: GPL3
@@ -240,19 +239,16 @@ def create_epis(lf_in, epi_out, hdf5_group_in, hdf5_group_out="epis",  dtype=np.
 ################################################################################
 
 
+parser = argparse.ArgumentParser(description='Extract EPIs from a given lightfield and store them in a .hdf5 file.')
+
+parser.add_argument('lightfiled', help='The filename including the directory of the lightfield.')
+parser.add_argument('epis', help='The filename including the directory to save the EPI .hdf5 file.')
+parser.add_argument('--hdf5_group_lf', help='The group name inside hdf5 File.', default='lightfield')
+parser.add_argument('--hdf5_group_epi', help='The group name inside hdf5 File.', default='lightfield')
+parser.add_argument('--dtype', help='The dtype used to store the lightfild data.', choices=[np.float64, np.uint8, np.uint16],default=np.float64)
+parser.add_argument('-RGB',help='Flag to determine if resulting lightfield should consists of RGB values.',action='store_true')
 
 if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser(description='Extract EPIs from a given lightfield and store them in a .hdf5 file.')
-
-    parser.add_argument('lightfiled', help='The filename including the directory of the lightfield.')
-
-    parser.add_argument('epis', help='The filename including the directory to save the EPI .hdf5 file.')
-    parser.add_argument('--hdf5_group_lf', help='The group name inside hdf5 File.', default='lightfield')
-    parser.add_argument('--hdf5_group_epi', help='The group name inside hdf5 File.', default='lightfield')
-    parser.add_argument('--dtype', help='The dtype used to store the lightfild data.', choices=[np.float64, np.uint8, np.uint16], default=np.float64)
-    parser.add_argument('-RGB', help='Flag to determine if resulting lightfield should consists of RGB values.', action='store_true')
-
 
     args = parser.parse_args()
 
@@ -262,7 +258,6 @@ if __name__ == "__main__":
     downsample_lightfield(args.lightfiled, 'tmp.hdf5', args.hdf5_group_lf, r_all)
     create_epis('tmp.hdf5', args.epi, args.hdf5_group_lf, hdf5_group_out=args.hdf5_group_epi, dtype=args.dtype, RGB=args.RGB)
     os.remove('tmp.hdf5')
-
 
 
 

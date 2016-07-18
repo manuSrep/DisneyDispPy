@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 """
-Disney Disparity.
 :author: Manuel Tuschen
 :date: 20.06.2016
 :license: GPL3
@@ -16,6 +15,7 @@ import argparse
 import numpy as np
 import h5py
 from easyScripting import prepareLoading, prepareSaving
+
 
 
 
@@ -55,13 +55,22 @@ def clif2lf(clif_file, lf_file, clif_group, lf_group="lightfiled" ):
 
 
 
-if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description='Convert lightfiled of .clif files to the .hdf5 file format.')
-    parser.add_argument('clif_file', help='The filename including the directory of the .clif file.')
-    parser.add_argument('lf_file', help='The filename including the directory of the .ddf5 file.')
-    parser.add_argument('clif_group', help='The group name inside .clif File.')
-    parser.add_argument('--lf_group', help='The group name inside .hdf5 File.', default='lightfield')
+################################################################################
+#                                                                              #
+#                       Can be used as a command line tool                     #
+#                                                                              #
+################################################################################
+
+parser = argparse.ArgumentParser(description='Convert lightfiled of .clif files to the .hdf5 file format.')
+
+parser.add_argument('clif_file',help='The filename including the directory of the .clif file.')
+parser.add_argument('lf_file',help='The filename including the directory of the .ddf5 file.')
+parser.add_argument('clif_group', help='The group name inside .clif File.')
+parser.add_argument('--lf_group', help='The group name inside .hdf5 File.', default='lightfield')
+
+
+if __name__ == "__main__":
 
     args = parser.parse_args()
     clif2lf(args.lightfiled, args.lf_file, args.clif_group, lf_group=args.lf_group)

@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 """
-Disney Disparity.
 :author: Manuel Tuschen
 :date: 20.06.2016
 :license: GPL3
@@ -78,16 +77,14 @@ def dmap2hdf5(input_dir, output_file, output_dataset='disparities'):
 #                                                                              #
 ################################################################################
 
+parser = argparse.ArgumentParser(description='Convert results from .dmap files into .hdf5 file.')
+
+parser.add_argument('input_dir',help='The directory where the .dmap files are located.')
+parser.add_argument('output_file',help='TThe filename  (including the directory), of the output file.')
+parser.add_argument('--output_dataset',help='The container name in the hdf5 file.',default='disparities')
 
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description='Convert results from .dmap files into .hdf5 file.')
-
-    parser.add_argument('input_dir', help='The directory where the .dmap files are located.')
-    parser.add_argument('output_file', help='TThe filename  (including the directory), of the output file.')
-    parser.add_argument('--output_dataset', help='The container name in the hdf5 file.', default='disparities')
-
     args = parser.parse_args()
-
     dmap2hdf5(args.input_dir, args.output_file, output_dataset=args.output_dataset)

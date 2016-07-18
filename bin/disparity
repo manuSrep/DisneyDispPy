@@ -1,0 +1,57 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+
+"""
+:author: Manuel Tuschen
+:date: 20.06.2016
+:license: GPL3
+"""
+
+from __future__ import division, absolute_import, unicode_literals, print_function
+
+import argparse
+
+from DisneyDisp import Disney
+
+
+
+
+################################################################################
+#                                                                              #
+#                       Can be used as a command line tool                     #
+#                                                                              #
+################################################################################
+
+parser = argparse.ArgumentParser(description='Calulate disparity fom a given lightfield.')
+
+parser.add_argument('lightfield', help='The filename including the directory of the lightfield.')
+
+parser.add_argument('--hdf5_group', help='The group name inside hdf5 File.', default='lightfield')
+parser.add_argument('--working_dir', help='The directory used to store intermediate data.', default='tmp/')
+parser.add_argument('--result_dir', help='The output directory.', default='results/')
+parser.add_argument('--s_hat', help='If given, only this s-dimension will be computed.', type=int, default=None)
+parser.add_argument('--r_start', help='The resolution to start with. Can only be used in DEBUG mode.',nargs=2, type=int, default=None)
+parser.add_argument('--min_disp', help='The minimal disparity to sample for.', type=float, default=1)
+parser.add_argument('--max_disp', help='The maximal disparity to sample for.', type=float, default=20)
+parser.add_argument('--stepsize', help='The disparity setp size during sampling .', type=float, default=1)
+parser.add_argument('--Ce_t', help='The threshold for the edge confidence measurement.', type=float, default=0.02)
+parser.add_argument('--Cd_t', help='The threshold for the depth confidence measurement.', type=float, default=0.1)
+parser.add_argument('--S_t', help='The threshold for the bilateral median filter measurement.',type=float, default=0.1)
+parser.add_argument('--n_jobs', help='The number of threads to use.', type=int, default=-1)
+parser.add_argument('-NOISEFREE', help='Disable radiance update for lightfield without noise', action='store_true')
+parser.add_argument('-DEBUG', help='Enable plotting of intermediate results',action='store_true')
+
+
+if __name__ == "__main__":
+
+    args = parser.parse_args()
+
+    disney = Disney(args.lightfield, args.hdf5_group, args.result_dir,
+                    working_dir=args.working_dir, n_cpus=args.n_jobs,
+                    r_start=args.r_start, s_hat=args.s_hat, DEBUG=args.DEBUG)
+
+    disney.calculateDisp(min_disp=args.min_disp, max_disp=args.max_disp,
+                         stepsize=args.stepsize, Ce_t=args.Ce_t, Cd_t=args.Cd_t,
+                         S_t=args.S_t, NOISEFREE=args.NOISEFREE)
+
+    disney.calculateMap()

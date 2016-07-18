@@ -1,0 +1,36 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+
+"""
+:author: Manuel Tuschen
+:date: 20.06.2016
+:license: GPL3
+"""
+
+from __future__ import division, absolute_import, unicode_literals, print_function
+
+import argparse
+
+from DisneyDisp import clif2lf
+
+
+
+
+################################################################################
+#                                                                              #
+#                       Can be used as a command line tool                     #
+#                                                                              #
+################################################################################
+
+parser = argparse.ArgumentParser(description='Convert lightfiled of .clif files to the .hdf5 file format.')
+parser.add_argument('clif_file',help='The filename including the directory of the .clif file.')
+parser.add_argument('lf_file',help='The filename including the directory of the .ddf5 file.')
+parser.add_argument('clif_group', help='The group name inside .clif File.')
+parser.add_argument('--lf_group', help='The group name inside .hdf5 File.',default='lightfield')
+
+if __name__ == "__main__":
+
+    args = parser.parse_args()
+
+    clif2lf(args.lightfiled, args.lf_file, args.clif_group, lf_group=args.lf_group)
+

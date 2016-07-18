@@ -1,0 +1,365 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Command line utitlites &mdash; DisneyDisp 0.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="DisneyDisp 0.1.1 documentation" href="index.html" />
+    <link rel="next" title="DisneyDisp package" href="DisneyDisp.html" />
+    <link rel="prev" title="Welcome to DisneyDisp’s documentation!" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="command-line-utitlites">
+<h1>Command line utitlites<a class="headerlink" href="#command-line-utitlites" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="disparity">
+<h2>Disparity<a class="headerlink" href="#disparity" title="Permalink to this headline">¶</a></h2>
+<p>Calulate disparity fom a given lightfield.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">disparity</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">hdf5_group</span> <span class="n">HDF5_GROUP</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">working_dir</span> <span class="n">WORKING_DIR</span><span class="p">]</span>
+                 <span class="p">[</span><span class="o">--</span><span class="n">result_dir</span> <span class="n">RESULT_DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">s_hat</span> <span class="n">S_HAT</span><span class="p">]</span>
+                 <span class="p">[</span><span class="o">--</span><span class="n">r_start</span> <span class="n">R_START</span> <span class="n">R_START</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">min_disp</span> <span class="n">MIN_DISP</span><span class="p">]</span>
+                 <span class="p">[</span><span class="o">--</span><span class="n">max_disp</span> <span class="n">MAX_DISP</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">stepsize</span> <span class="n">STEPSIZE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">Ce_t</span> <span class="n">CE_T</span><span class="p">]</span>
+                 <span class="p">[</span><span class="o">--</span><span class="n">Cd_t</span> <span class="n">CD_T</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">S_t</span> <span class="n">S_T</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">n_jobs</span> <span class="n">N_JOBS</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">NOISEFREE</span><span class="p">]</span>
+                 <span class="p">[</span><span class="o">-</span><span class="n">DEBUG</span><span class="p">]</span>
+                 <span class="n">lightfield</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Positional arguments:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd>lightfield</kbd></td>
+<td>The filename including the directory of the lightfield.</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--hdf5_group=lightfield</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The group name inside hdf5 File.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--working_dir=tmp/</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The directory used to store intermediate data.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--result_dir=results/</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The output directory.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--s_hat</span></kbd></td>
+<td>If given, only this s-dimension will be computed.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--r_start</span></kbd></td>
+<td>The resolution to start with. Can only be used in DEBUG mode.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--min_disp=1</span></kbd></td>
+<td>The minimal disparity to sample for.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--max_disp=20</span></kbd></td>
+<td>The maximal disparity to sample for.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--stepsize=1</span></kbd></td>
+<td>The disparity setp size during sampling .</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--Ce_t=0.02</span></kbd></td>
+<td>The threshold for the edge confidence measurement.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--Cd_t=0.1</span></kbd></td>
+<td>The threshold for the depth confidence measurement.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--S_t=0.1</span></kbd></td>
+<td>The threshold for the bilateral median filter measurement.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--n_jobs=-1</span></kbd></td>
+<td>The number of threads to use.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-NOISEFREE=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Disable radiance update for lightfield without noise</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-DEBUG=False</span></kbd></td>
+<td>Enable plotting of intermediate results</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="imgs2lf">
+<h2>Imgs2lf<a class="headerlink" href="#imgs2lf" title="Permalink to this headline">¶</a></h2>
+<p>Store image files into hdf5 container.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">imgs2lf</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">output_file</span> <span class="n">OUTPUT_FILE</span><span class="p">]</span>
+               <span class="p">[</span><span class="o">--</span><span class="n">output_dataset</span> <span class="n">OUTPUT_DATASET</span><span class="p">]</span>
+               <span class="p">[</span><span class="o">--</span><span class="n">img_extension</span> <span class="n">IMG_EXTENSION</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">dtype</span> <span class="p">{</span><span class="nb">float</span><span class="p">,</span><span class="n">uint</span><span class="p">,</span><span class="n">ubyte</span><span class="p">}]</span>
+               <span class="p">[</span><span class="o">-</span><span class="n">RGB</span><span class="p">]</span>
+               <span class="n">input_dir</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Positional arguments:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd>input_dir</kbd></td>
+<td>The directory where the lightfield images are located.</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--output_file=lightfield</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The filename (including the directory) of the output .hdf5 file.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--output_dataset=lightfield</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The container name in the hdf5 file.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--img_extension=.png</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The file extension of the images to look for.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--dtype=uint</span></kbd></td>
+<td><p class="first">The dtype used to store the lightfild data.</p>
+<p class="last">Possible choices: float, uint, ubyte</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-RGB=False</span></kbd></td>
+<td>Flag to determine if resulting lightfield should consists of RGB values.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="lf2epi">
+<h2>Lf2epi<a class="headerlink" href="#lf2epi" title="Permalink to this headline">¶</a></h2>
+<p>Extract EPIs from a given lightfield and store them in a .hdf5 file.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>usage: lf2epi [-h] [--hdf5_group_lf HDF5_GROUP_LF]
+              [--hdf5_group_epi HDF5_GROUP_EPI]
+              [--dtype {&lt;class &#39;numpy.float64&#39;&gt;,&lt;class &#39;numpy.uint8&#39;&gt;,&lt;class &#39;numpy.uint16&#39;&gt;}]
+              [-RGB]
+              lightfiled epis
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Positional arguments:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd>lightfiled</kbd></td>
+<td>The filename including the directory of the lightfield.</td></tr>
+<tr><td class="option-group">
+<kbd>epis</kbd></td>
+<td>The filename including the directory to save the EPI .hdf5 file.</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--hdf5_group_lf=lightfield</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The group name inside hdf5 File.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--hdf5_group_epi=lightfield</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The group name inside hdf5 File.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--dtype=&lt;class 'numpy.float64'&gt;</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td><p class="first">The dtype used to store the lightfild data.</p>
+<p class="last">Possible choices: &lt;class &#8216;numpy.float64&#8217;&gt;, &lt;class &#8216;numpy.uint8&#8217;&gt;, &lt;class &#8216;numpy.uint16&#8217;&gt;</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-RGB=False</span></kbd></td>
+<td>Flag to determine if resulting lightfield should consists of RGB values.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="clif2lf">
+<h2>clif2lf<a class="headerlink" href="#clif2lf" title="Permalink to this headline">¶</a></h2>
+<p>Convert lightfiled of .clif files to the .hdf5 file format.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">clif2lf</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">lf_group</span> <span class="n">LF_GROUP</span><span class="p">]</span> <span class="n">clif_file</span> <span class="n">lf_file</span> <span class="n">clif_group</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Positional arguments:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd>clif_file</kbd></td>
+<td>The filename including the directory of the .clif file.</td></tr>
+<tr><td class="option-group">
+<kbd>lf_file</kbd></td>
+<td>The filename including the directory of the .ddf5 file.</td></tr>
+<tr><td class="option-group">
+<kbd>clif_group</kbd></td>
+<td>The group name inside .clif File.</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--lf_group=lightfield</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The group name inside .hdf5 File.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="dmap2hdf5">
+<h2>Dmap2hdf5<a class="headerlink" href="#dmap2hdf5" title="Permalink to this headline">¶</a></h2>
+<p>Convert results from .dmap files into .hdf5 file.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">dmap2hdf5</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">output_dataset</span> <span class="n">OUTPUT_DATASET</span><span class="p">]</span> <span class="n">input_dir</span> <span class="n">output_file</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Positional arguments:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd>input_dir</kbd></td>
+<td>The directory where the .dmap files are located.</td></tr>
+<tr><td class="option-group">
+<kbd>output_file</kbd></td>
+<td>TThe filename  (including the directory), of the output file.</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--output_dataset=disparities</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The container name in the hdf5 file.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Command line utitlites</a><ul>
+<li><a class="reference internal" href="#disparity">Disparity</a></li>
+<li><a class="reference internal" href="#imgs2lf">Imgs2lf</a></li>
+<li><a class="reference internal" href="#lf2epi">Lf2epi</a></li>
+<li><a class="reference internal" href="#clif2lf">clif2lf</a></li>
+<li><a class="reference internal" href="#dmap2hdf5">Dmap2hdf5</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to DisneyDisp&#8217;s documentation!</a></li>
+      <li>Next: <a href="DisneyDisp.html" title="next chapter">DisneyDisp package</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/CommandLineTools.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Marcel Gutsche, Manuel Tuschen.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/CommandLineTools.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,35 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+
+"""
+:author: Manuel Tuschen
+:date: 20.06.2016
+:license: GPL3
+"""
+
+from __future__ import division, absolute_import, unicode_literals, print_function
+
+import argparse
+
+from DisneyDisp import dmap2hdf5
+
+
+
+
+################################################################################
+#                                                                              #
+#                       Can be used as a command line tool                     #
+#                                                                              #
+################################################################################
+
+parser = argparse.ArgumentParser(description='Convert results from .dmap files into .hdf5 file.')
+
+parser.add_argument('input_dir',help='The directory where the .dmap files are located.')
+parser.add_argument('output_file',help='TThe filename  (including the directory), of the output file.')
+parser.add_argument('--output_dataset',help='The container name in the hdf5 file.',default='disparities')
+
+
+if __name__ == "__main__":
+
+    args = parser.parse_args()
+    dmap2hdf5(args.input_dir, args.output_file, output_dataset=args.output_dataset)
