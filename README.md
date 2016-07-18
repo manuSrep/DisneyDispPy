@@ -19,7 +19,7 @@ DisneyDisp is a free python implementation of *Scene Reconstruction from High Sp
 After intallation you can use the following command line tools directly:
 
 ```
-disney
+disparity
 imgs2lf
 lf2epi
 dmap2hdf5
