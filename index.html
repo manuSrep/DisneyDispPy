@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to DisneyDispPy’s documentation! &mdash; DisneyDispPy 0.1.1 documentation</title>
+    <title>Welcome to DisneyDisp’s documentation! &mdash; DisneyDisp 0.1.10 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1.1',
+        VERSION:     '0.1.10',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="DisneyDispPy 0.1.1 documentation" href="#" />
-    <link rel="next" title="DisneyDisp package" href="DisneyDisp.html" />
+    <link rel="top" title="DisneyDisp 0.1.10 documentation" href="#" />
+    <link rel="next" title="Command line utitlites" href="clu.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -37,30 +37,33 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="welcome-to-disneydisppy-s-documentation">
-<h1>Welcome to DisneyDispPy&#8217;s documentation!<a class="headerlink" href="#welcome-to-disneydisppy-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Contents:</p>
+  <div class="section" id="welcome-to-disneydisp-s-documentation">
+<h1>Welcome to DisneyDisp&#8217;s documentation!<a class="headerlink" href="#welcome-to-disneydisp-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>DisneyDisp is a free python implementation of <em>Scene Reconstruction from High Spatio-Angular Resolution Light Fields</em> originally developed by <em>Disney research</em>. [1]. It enables disparity estimation of 3D lightfields by preserving fine details. For more details see also: <a class="reference external" href="https://www.disneyresearch.com/project/lightfields/">https://www.disneyresearch.com/project/lightfields/</a></p>
+<ol class="arabic simple">
+<li>Kim, C., Zimmer, H., Pritch, Y., Sorkine-Hornung, A. &amp; Gross, M., Scene Reconstruction from High Spatio-Angular Resolution Light Fields. ACM Transactions on Graphics 32, 1-12 (2013).</li>
+</ol>
+<p>The main programm is provided as a commnad line tool and comes along with some smaller tools which facilitate data preparation. Apart from that we provide APIs to include the implementation into other programms.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="DisneyDisp.html">DisneyDisp package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="DisneyDisp.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="DisneyDisp.html#module-DisneyDisp.clif2lf">DisneyDisp.clif2lf module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="DisneyDisp.html#module-DisneyDisp.dmap2hdf5">DisneyDisp.dmap2hdf5 module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="DisneyDisp.html#module-DisneyDisp.imgs2lf">DisneyDisp.imgs2lf module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="DisneyDisp.html#module-DisneyDisp.lf2epi">DisneyDisp.lf2epi module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="DisneyDisp.html#module-DisneyDisp">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clu.html">Command line utitlites</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="clu.html#disparity">disparity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clu.html#imgs2lf">imgs2lf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clu.html#lf2epi">lf2epi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clu.html#clif2lf">clif2lf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clu.html#dmap2hdf5">dmap2hdf5</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="disney.html">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="disney.html#module-DisneyDisp.disparity">DisneyDisp.disparity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disney.html#module-DisneyDisp.imgs2lf">DisneyDisp.imgs2lf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disney.html#module-DisneyDisp.lf2epi">DisneyDisp.lf2epi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disney.html#module-DisneyDisp.clif2lf">DisneyDisp.clif2lf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disney.html#module-DisneyDisp.dmap2hdf5">DisneyDisp.dmap2hdf5</a></li>
 </ul>
 </li>
 </ul>
 </div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
-</ul>
 </div>
 
 
@@ -68,17 +71,11 @@
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Welcome to DisneyDispPy&#8217;s documentation!</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-<div class="relations">
+        <div class="sphinxsidebarwrapper"><div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="DisneyDisp.html" title="next chapter">DisneyDisp package</a></li>
+      <li>Next: <a href="clu.html" title="next chapter">Command line utitlites</a></li>
   </ul></li>
 </ul>
 </div>
@@ -107,7 +104,7 @@
       &copy;2016, Marcel Gutsche, Manuel Tuschen.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
       
       |
