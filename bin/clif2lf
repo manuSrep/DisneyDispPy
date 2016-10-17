@@ -12,7 +12,7 @@ from __future__ import division, absolute_import, unicode_literals, print_functi
 import argparse
 import sys
 import os
-sys.path.append(os.path.abspath("../DisneyDisp"))
+sys.path.append(os.path.abspath("../"))
 
 from DisneyDisp import clif2lf
 
