@@ -15,7 +15,7 @@ import argparse
 
 import numpy as np
 import h5py
-from easyScripting import multiLoading, prepareSaving
+from miscpy import multiLoading, prepareSaving
 
 
 def dmap2hdf5(input_dir, output_file, output_dataset='disparities'):

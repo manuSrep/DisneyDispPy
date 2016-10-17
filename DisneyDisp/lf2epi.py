@@ -21,7 +21,7 @@ from skimage.util import img_as_float, img_as_ubyte, img_as_uint
 from skimage.filters import gaussian
 from skimage.transform import resize
 from skimage.color import rgb2gray, gray2rgb
-from easyScripting import prepareLoading, prepareSaving
+from miscpy import prepareLoading, prepareSaving
 
 
 

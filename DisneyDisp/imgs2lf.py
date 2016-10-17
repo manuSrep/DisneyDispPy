@@ -17,7 +17,7 @@ import h5py
 from skimage.io import imread
 from skimage.util import img_as_float, img_as_ubyte, img_as_uint
 from skimage.color import rgb2gray, gray2rgb
-from easyScripting import multiLoading, prepareSaving
+from miscpy import multiLoading, prepareSaving
 
 
 

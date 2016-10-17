@@ -14,7 +14,7 @@ import argparse
 
 import numpy as np
 import h5py
-from easyScripting import prepareLoading, prepareSaving
+from miscpy import prepareLoading, prepareSaving
 
 
 
