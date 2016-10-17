@@ -28,7 +28,7 @@ clif2lf
 
 Just type ```command --help``` for more information. For more information on our API, please visit the [documentation](https://manusrep.github.io/DisneyDispPy/):
 
-## Liscense
+## License
 The programm, all code and documentation is released under the  GNU General Public License Version 3.0 (GPL3). For more information see <http://www.gnu.org/licenses/>.
 
 
