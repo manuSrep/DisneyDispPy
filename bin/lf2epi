@@ -11,6 +11,9 @@ from __future__ import division, absolute_import, unicode_literals, print_functi
 
 import os
 import argparse
+import sys
+import os
+sys.path.append(os.path.abspath("../DisneyDisp"))
 
 import numpy as np
 import h5py
