@@ -39,7 +39,7 @@ def find_disp_bounds(Disps, min_disp, max_disp, stepsize):
 
     u_dim = Disps.shape[0]
 
-    DB = np.zeros((u_dim, 2), dtype=np.float64)
+    DB = np.zeros((u_dim, 2), dtype=np.float32)
     DB[:, 0] = min_disp
     DB[:, 1] = max_disp
 
@@ -120,6 +120,8 @@ def sample_radiance(epi, s_hat, min_disp, max_disp, stepsize, DB, M, DEBUG=False
     R : numpy.array [u,d,s]
         The set of sampled radiances. For each pixel u and disparity d the gray
         value for each scanline s is stored.
+    Mr : numpy.array [u,d,s]
+        Mask to indicate if value was sampled.
     disp_range : numpy.array [d].
         The range of disparities used during the sampling.
     plots : ndarray [d,s,u] or None.
@@ -146,13 +148,14 @@ def sample_radiance(epi, s_hat, min_disp, max_disp, stepsize, DB, M, DEBUG=False
     else:
         plots = np.zeros((n_disp, s_dim, u_dim,), dtype=np.uint8)
 
-    R, plots = sample_radiance_inner(epi, s_hat, disp_range, DB, M, plots, DEBUG=DEBUG)
+    R, Mr, plots = sample_radiance_inner(epi, s_hat, disp_range, DB, M, plots, DEBUG=DEBUG)
 
     # Let's see if our results have reasonable meaning'
     assert R.shape == (u_dim, d_dim, s_dim,), 'Output R has wrong shape in function \'sample_radiance\'.'
+    assert Mr.shape == (u_dim, d_dim, s_dim,), 'Output Mr has wrong shape in function \'sample_radiance\'.'
     assert plots.shape == (d_dim, s_dim, u_dim,), 'Output R has wrong shape in function \'sample_radiance\'.'
 
-    return R, disp_range, plots
+    return R, Mr, disp_range, plots
 
 
 @jit(nopython=True)
@@ -186,6 +189,8 @@ def sample_radiance_inner(epi, s_hat, disp_range, DB, M, plots, DEBUG=False):
     R : numpy.array [u,d,s]
         The set of sampled radiances. For each pixel u and disparity d the gray
         value for each scanline s is stored.
+    Mr : numpy.array [u,d,s]
+        Mask to indicate if value was sampled.
     plots : ndarray [d,s,u] or None.
         If plotting was enabled epis with markings of the sampling process.
     """
@@ -194,7 +199,8 @@ def sample_radiance_inner(epi, s_hat, disp_range, DB, M, plots, DEBUG=False):
     d_dim = len(disp_range)
     s_dim = epi.shape[0]
 
-    R = np.full((u_dim, d_dim, s_dim,), np.nan, dtype=np.float64)
+    R = np.zeros((u_dim, d_dim, s_dim,), dtype=np.uint8)
+    Mr = np.full((u_dim, d_dim, s_dim,), fill_value=False, dtype=np.bool_)
 
     for u in range(u_dim):
         if not M[u]:
@@ -220,9 +226,10 @@ def sample_radiance_inner(epi, s_hat, disp_range, DB, M, plots, DEBUG=False):
                         a = (x1 - x) / (x1 - x0)
                         b = (x - x0) / (x1 - x0)
                     R[u, d, s] = ((a * epi[s, x0]) + (b * epi[s, x1]))
+                    Mr[u, d, s] = True
 
                 if DEBUG:
-                    plots[d, s, x0] = 1
-                    plots[d, s, x1] = 1
+                    plots[d, s, x0] = 255
+                    plots[d, s, x1] = 255
 
-    return R, plots
+    return R, Mr, plots

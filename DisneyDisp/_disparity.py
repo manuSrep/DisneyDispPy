@@ -50,10 +50,9 @@ def estimate_disp(D, S, M, R_bar, disp_range):
     # Check dimensions of input data
     assert D.shape == (u_dim,), 'Input D has wrong number of dimensions in function \'estimate_disp\'.'
     assert S.shape == (u_dim, d_dim), 'Input S has wrong number of dimensions in function \'estimate_disp\'.'
-    assert M.shape == (u_dim,), 'Input Mc has wrong number of dimensions in function \'estimate_disp\'.'
+    assert M.shape == (u_dim,), 'Input M has wrong number of dimensions in function \'estimate_disp\'.'
     assert R_bar.shape == (u_dim,d_dim,), 'Input R_bar has wrong number of dimensions in function \'estimate_disp\'.'
     assert disp_range.shape == (d_dim,), 'Input disp has wrong number of dimensions in function \'estimate_disp\'.'
-    assert not np.any(np.isnan(S)), 'NaN detected in Score input in fucntion \'estimate_disp\'.'
 
     # We need to find the disparity of maximal score
     S_argmax = np.argmax(S, axis=-1)
@@ -114,7 +113,7 @@ def bilateral_median(Ds, epis, M, Me, window=11, threshold=0.1):
     assert epis.shape == (v_dim, u_dim,), 'Input epis has wrong number of dimensions in function \'bilateral_median\'.'
     assert Ds.shape == (v_dim, u_dim,), 'Input Ds has wrong number of dimensions in function \'bilateral_median\'.'
     assert Me.shape == (v_dim,u_dim,), 'Input Mes has wrong number of dimensions in function \'bilateral_median\'.'
-    assert M.shape == (v_dim, u_dim,), 'Input Mcs has wrong number of dimensions in function \'bilateral_median\'.'
+    assert M.shape == (v_dim, u_dim,), 'Input Ms has wrong number of dimensions in function \'bilateral_median\'.'
 
     # The epis must be extended in u and v-dimension to avoid a boarder problem
     # pad epis in u-dimension
@@ -189,14 +188,13 @@ def bilateral_median_inner(Ds_padded, epis_padded, Me_padded, M, v_u_dim,
     v_dim = v_u_dim[0]
     u_dim = v_u_dim[1]
 
-    smoothed_Ds = np.full((v_dim, u_dim), np.nan,dtype=np.float64)  # we collect all the values
+    smoothed_Ds = np.full((v_dim, u_dim), np.nan,dtype=np.float32)  # we collect all the values
 
     for v in range(v_dim):
         for u in range(u_dim):
 
             if not M[v, u]:
                 continue
-
             v_hat = v + int(window // 2)
             u_hat = u + int(window // 2)
 
@@ -217,7 +215,7 @@ def bilateral_median_inner(Ds_padded, epis_padded, Me_padded, M, v_u_dim,
                         values_to_smooth.append(Ds_padded[v_, u_])
 
             if len(values_to_smooth) > 0:
-                tmp_array = np.zeros((len(values_to_smooth),), dtype=np.float64)
+                tmp_array = np.zeros((len(values_to_smooth),), dtype=np.float32)
                 for i in range(len(values_to_smooth)):
                     tmp_array[i] = values_to_smooth[i]
                 smoothed_Ds[v, u] = np.median(tmp_array)
@@ -235,7 +233,7 @@ def propagation(Ds, epi, R_bar_best, s_hat, threshold=0.1, DEBUG=False):
         The set of already calculated disparities for each EPI.
     epi : numpy.array [v,s,u]
         Set of all gray-value epis.
-    R_bar_best : numpy.array [u]
+    R_bar_best : numpy.array [v,u]
         The best updated convergence radiance for each EPI pixel.
     s_hat : int
        The current scanline s to sample for.
@@ -311,7 +309,7 @@ def propagation_inner(Ds, epi, R_bar_best, s_hat, threshold, plots, DEBUG=False)
     # Go through all the entries in Disps
     for v in range(v_dim):
         for u in range(u_dim):
-            if np.isnan(Ds[v, s_hat, u]):  # we need not to propagate NaNs
+            if np.isnan(Ds[v, s_hat, u]):  # we must not propagate NaNs
                 continue
 
             # we need to check if a pixel can be reached by propagation

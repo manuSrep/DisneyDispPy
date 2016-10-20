@@ -9,10 +9,6 @@
 
 from __future__ import division, absolute_import, unicode_literals, print_function
 
-import os
-import math
-import argparse
-
 import numpy as np
 import h5py
 from progressbar import Bar, ETA, Percentage, ProgressBar
@@ -53,20 +49,20 @@ def calculate_resolutions(r0_v, r0_u, red_fac=2, min_res=11):
 
     r_all = [[r0_v, r0_u]] # initialize the output list
 
-    v = math.ceil(float(r0_v) / float(red_fac))
-    u = math.ceil(float(r0_u) / float(red_fac))
+    v = np.ceil(float(r0_v) / float(red_fac))
+    u = np.ceil(float(r0_u) / float(red_fac))
 
     while v > min_res and u > min_res:
         r_all.append([v,u])
-        u = math.ceil(float(u) / float(red_fac))
-        v = math.ceil(float(v) / float(red_fac))
+        u = np.ceil(float(u) / float(red_fac))
+        v = np.ceil(float(v) / float(red_fac))
 
     return np.array(r_all, dtype=np.uint16)
 
 
 
 
-def downsample_lightfield(lf_in, lf_out, hdf5_group, r_all):
+def downsample_lightfield(lf_in, lf_out, hdf5_dataset, r_all):
     """
     Reduces the dimension of the input lightfield to the values given.
     Results are stored in a new hdf5 file.
@@ -78,49 +74,68 @@ def downsample_lightfield(lf_in, lf_out, hdf5_group, r_all):
     lf_out : string
         The output hdf5 filename (including the directory) of the lightfield
         in all resolutions.
-    hdf5_group: string
+    hdf5_dataset: string
         The container name inside the hdf5 file for the lightfield. The same
         name will be used for the new file.
     r_all: array_like
         All resolutions to create. Each entry is a tuple (u,v) of resolutions.
     """
 
-    # Initialze the hdf5 file objects
-    fname_in = os.path.basename(lf_in)
-    dir_in = os.path.dirname(lf_in)
-    lf_in = prepareLoading(fname_in, path=dir_in)
-
-    fname_out = os.path.basename(lf_out)
-    dir_out = os.path.dirname(lf_out)
-    lf_out = prepareSaving(fname_out, path=dir_out, extension=".hdf5")
+    # Initialize the hdf5 file objects
+    lf_in = prepareLoading(lf_in)
+    lf_out = prepareSaving(lf_out, extension=".hdf5")
 
     lf_in = h5py.File(lf_in, 'r')
     lf_out = h5py.File(lf_out, 'w')
 
-    data_in = lf_in[hdf5_group]
-    
-    
+    data_in = lf_in[hdf5_dataset]
+    # Find out what data we have
+    if len(data_in.shape) == 4 and data_in.shape[-1] == 3:
+        RGB = True
+    elif len(data_in.shape) == 3:
+        RGB = False
+    else:
+        raise TypeError('The given lightfield contains neither gray nor RGB images!')
+
+    # Which dtype should be used?
+    if data_in.dtype == np.float64:
+        DTYPE = np.float64
+    elif data_in.dtype == np.uint8:
+        DTYPE = np.uint8
+    elif data_in. dtype == np.uint16:
+        DTYPE = np.uint16
+    else:
+        raise TypeError('The given data type is not supported!')
+
+
     # We need to store all resolutions
-    grp_out = lf_out.create_group(hdf5_group)
+    grp_out = lf_out.create_group(hdf5_dataset)
     grp_out.attrs.create('resolutions', r_all)
-    
-    
+
     # Initialize a progress bar to follow the downsampling
-    widgets = ['Downsaple lightfields: ', Percentage(), ' ', Bar(),' ', ETA(), ' ']
-    progress = ProgressBar(widgets=widgets, maxval=r_all.shape[0]).start()
+    widgets = ['Downscale lightfield: ', Percentage(), ' ', Bar(),' ', ETA(), ' ']
+    progress = ProgressBar(widgets=widgets, max_val=r_all.shape[0]).start()
 
     for r,res in enumerate(r_all):
-        
-        data_out = grp_out.create_dataset(str(res[0]) + 'x' + str(res[1]), shape=(data_in.shape[0], res[0], res[1], data_in.shape[3]), dtype=np.float64)
-            
+
+        if RGB:
+            data_out = grp_out.create_dataset(str(res[0]) + 'x' + str(res[1]), shape=(data_in.shape[0], res[0], res[1], data_in.shape[3]), dtype=data_in.dtype)
+        else:
+            data_out = grp_out.create_dataset(str(res[0]) + 'x' + str(res[1]), shape=(data_in.shape[0], res[0], res[1]), dtype=data_in.dtype)
+
         if r == 0: # at lowest resolution we take the original image
             for s in range(data_in.shape[0]):
                 data_out[s] = img_as_float(data_in[s])
         else: # we smooth the imput data
             data_prior = grp_out[str(r_all[r-1][0]) + 'x' + str(r_all[r-1][1])]
             for s in range(data_in.shape[0]):
-                data_smoothed = img_as_float(gaussian(data_prior[s], sigma=math.sqrt(0.5), multichannel=True))
-                data_out[s] = resize(data_smoothed, (res[0], res[1]))
+                data_smoothed = img_as_float(gaussian(data_prior[s], sigma=np.sqrt(0.5), multichannel=True))
+                if DTYPE is np.float64:
+                    data_out[s] = img_as_float(resize(data_smoothed, (res[0], res[1])))
+                elif DTYPE is np.uint16:
+                    data_out[s] = img_as_uint(resize(data_smoothed, (res[0], res[1])))
+                else:
+                    data_out[s] = img_as_ubyte(resize(data_smoothed, (res[0], res[1])))
         
         progress.update(r)
     progress.finish()
@@ -132,10 +147,9 @@ def downsample_lightfield(lf_in, lf_out, hdf5_group, r_all):
 
 
 
-def create_epis(lf_in, epi_out, hdf5_group_in, hdf5_group_out="epis",  dtype=np.float64, RGB=True):
+def create_epis(lf_in, epi_out, hdf5_dataset_in="lightfield", hdf5_dataset_out="epis", dtype=np.float64, RGB=True):
     """
     Create epis for all resolutions given by the input lightfield.
-
 
     Parameters
     ----------
@@ -144,10 +158,10 @@ def create_epis(lf_in, epi_out, hdf5_group_in, hdf5_group_out="epis",  dtype=np.
     epi_out : string
         The output hdf5 filename (including the directory) of the lightfield
         in all resolutions.
-    hdf5_group_in: string
+    hdf5_dataset_in: string
         The container name inside the hdf5 file for the lightfield. The same
         name will be used for the new file.
-    hdf5_group_out: string, optional
+    hdf5_dataset_out: string, optional
         The container name inside the hdf5 file for the epis.
     dtype : numpy.dtype, optional
         The new data type for the epis. Must be either
@@ -158,64 +172,64 @@ def create_epis(lf_in, epi_out, hdf5_group_in, hdf5_group_out="epis",  dtype=np.
     """
 
     # Initialze the hdf5 file objects
-    fname_in = os.path.basename(lf_in)
-    dir_in = os.path.dirname(lf_in)
-    lf_in = prepareLoading(fname_in, path=dir_in)
-
-    fname_out = os.path.basename(epi_out)
-    dir_out = os.path.dirname(epi_out)
-    epi_out = prepareSaving(fname_out, path=dir_out, extension=".hdf5")
+    lf_in = prepareLoading(lf_in)
+    epi_out = prepareSaving(epi_out, extension=".hdf5")
 
     # Initialze the hdf5 file objects
     lf_in = h5py.File(lf_in, 'r')
     epi_out = h5py.File(epi_out, 'w')
 
-    r_all = lf_in[hdf5_group_in].attrs.get('resolutions')[...]
+    # Check if there is a resolution attribute. Create otherwise
+    r_all = lf_in[hdf5_dataset_in].attrs.get('resolutions')[...]
 
-    epi_grp = epi_out.create_group(hdf5_group_out)
+    epi_grp = epi_out.create_group(hdf5_dataset_out)
     epi_grp.attrs.create('resolutions', r_all)
-
 
 
     # Initialize a progress bar to follow the conversion
     widgets = ['Create EPIs: ', Percentage(), ' ', Bar(),' ', ETA(), ' ']
-    progress = ProgressBar(widgets=widgets, maxval=r_all.shape[0]).start()
+    progress = ProgressBar(widgets=widgets, max_val=r_all.shape[0]).start()
     for r,res in enumerate(r_all):
         progress.update(r)
 
         set_name = str(res[0]) + 'x' + str(res[1])
-        lf_data = lf_in[hdf5_group_in + '/' + set_name]
+        lf_data = lf_in[hdf5_dataset_in + '/' + set_name]
 
-        # Do we shall take RGB or gray images?
-        channels = lf_data.shape[-1]
-        if channels != 3 and channels != 1:
-            raise TypeError('The lightfield is neither gray nor RGB!')
+        # Find out what data we have
+        if len(lf_data.shape) == 4 and lf_data.shape[-1] == 3:
+            OLDRGB = True
+        elif len(lf_data.shape) == 3:
+            OLDRGB = False
+        else:
+            raise TypeError(
+                'The given lightfield contains neither gray nor RGB images!')
+
         if RGB:
             epi_data = epi_grp.create_dataset(set_name, shape=(res[0],lf_data.shape[0], res[1],3), dtype=dtype)
         else:
-            epi_data = epi_grp.create_dataset(set_name, shape=(res[0],lf_data.shape[0], res[1],), dtype=dtype)
+            epi_data = epi_grp.create_dataset(set_name, shape=(res[0],lf_data.shape[0], res[1]), dtype=dtype)
 
 
         for v in range(res[0]):
 
-            if dtype is np.float64:
-                if RGB and channels == 1:
+            if dtype == np.float64:
+                if RGB and not OLDRGB:
                     epi_data[v] = img_as_float(gray2rgb(lf_data[:,v,])).reshape(epi_data[v].shape)
-                elif not RGB and channels == 3:
+                elif not RGB and OLDRGB:
                     epi_data[v] = img_as_float(rgb2gray(lf_data[:,v,])).reshape(epi_data[v].shape)
                 else:
                     epi_data[v] = img_as_float(lf_data[:,v,...]).reshape(epi_data[v].shape)
-            elif dtype is np.uint16:
-                if RGB and channels == 1:
+            elif dtype == np.uint16:
+                if RGB and not OLDRGB:
                     epi_data[v] = img_as_uint(gray2rgb(lf_data[:,v,])).reshape(epi_data[v].shape)
-                elif not RGB and channels == 3:
+                elif not RGB and OLDRGB:
                     epi_data[v] = img_as_uint(rgb2gray(lf_data[:,v,])).reshape(epi_data[v].shape)
                 else:
                     epi_data[v] = img_as_uint(lf_data[:,v,...]).reshape(epi_data[v].shape)
-            elif dtype is np.uint8:
-                if RGB and channels == 1:
+            elif dtype == np.uint8:
+                if RGB and not OLDRGB:
                     epi_data[v] = img_as_ubyte(gray2rgb(lf_data[:,v,...])).reshape(epi_data[v].shape)
-                elif not RGB and channels == 3:
+                elif not RGB and OLDRGB:
                     epi_data[v] = img_as_ubyte(rgb2gray(lf_data[:,v,...])).reshape(epi_data[v].shape)
                 else:
                     epi_data[v] = img_as_ubyte(lf_data[:,v,...]).reshape(epi_data[v].shape)
@@ -224,47 +238,6 @@ def create_epis(lf_in, epi_out, hdf5_group_in, hdf5_group_out="epis",  dtype=np.
 
     progress.finish()
 
-
     # Cleanup
     lf_in.close()
     epi_out.close()
-
-
-
-
-################################################################################
-#                                                                              #
-#                       Can be used as a command line tool                     #
-#                                                                              #
-################################################################################
-
-
-parser = argparse.ArgumentParser(description='Extract EPIs from a given lightfield and store them in a .hdf5 file.')
-
-parser.add_argument('lightfiled', help='The filename including the directory of the lightfield.')
-parser.add_argument('epis', help='The filename including the directory to save the EPI .hdf5 file.')
-parser.add_argument('--hdf5_group_lf', help='The group name inside hdf5 File.', default='lightfield')
-parser.add_argument('--hdf5_group_epi', help='The group name inside hdf5 File.', default='lightfield')
-parser.add_argument('--dtype', help='The dtype used to store the lightfild data.', choices=[np.float64, np.uint8, np.uint16],default=np.float64)
-parser.add_argument('-RGB',help='Flag to determine if resulting lightfield should consists of RGB values.',action='store_true')
-
-if __name__ == "__main__":
-
-    args = parser.parse_args()
-
-    lf = h5py.File(args.lightfiled, 'r')
-    r_all = calculate_resolutions(lf[args.h5path].shape[1], lf[args.h5path].shape[2])
-
-    downsample_lightfield(args.lightfiled, 'tmp.hdf5', args.hdf5_group_lf, r_all)
-    create_epis('tmp.hdf5', args.epi, args.hdf5_group_lf, hdf5_group_out=args.hdf5_group_epi, dtype=args.dtype, RGB=args.RGB)
-    os.remove('tmp.hdf5')
-
-
-
-
-
-
-
-
-
-

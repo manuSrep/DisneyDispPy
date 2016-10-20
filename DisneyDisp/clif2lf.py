@@ -10,7 +10,6 @@
 from __future__ import division, absolute_import, unicode_literals, print_function
 
 import os
-import argparse
 
 import numpy as np
 import h5py
@@ -19,7 +18,7 @@ from miscpy import prepareLoading, prepareSaving
 
 
 
-def clif2lf(clif_file, lf_file, clif_group, lf_group="lightfiled" ):
+def clif2lf(clif_file, lf_file, clif_group, lf_dataset="lightfield" ):
     """
     Convert a standard .clif file to an .hdf5 lightfield file.
 
@@ -31,8 +30,8 @@ def clif2lf(clif_file, lf_file, clif_group, lf_group="lightfiled" ):
         The filename (including the directory) of the output .hdf5 lightfield.
     clif_group : string
         The container name inside the .clif file.
-    lf_group : string, optional
-        The container name inside the .hdf5 file for the lightfield.
+    lf_dataset : string, optional
+        The dataset name inside the .hdf5 file for the lightfield.
     """
 
     # Initialze the hdf5 file objects
@@ -49,29 +48,5 @@ def clif2lf(clif_file, lf_file, clif_group, lf_group="lightfiled" ):
     data = np.swapaxes(data, 1, 2)
 
     f_out = h5py.File(lf_file, 'w')
-    f_out.create_dataset(lf_group, data=data)
+    f_out.create_dataset(lf_dataset, data=data)
     f_out.close()
-
-
-
-
-
-################################################################################
-#                                                                              #
-#                       Can be used as a command line tool                     #
-#                                                                              #
-################################################################################
-
-parser = argparse.ArgumentParser(description='Convert lightfiled of .clif files to the .hdf5 file format.')
-
-parser.add_argument('clif_file',help='The filename including the directory of the .clif file.')
-parser.add_argument('lf_file',help='The filename including the directory of the .ddf5 file.')
-parser.add_argument('clif_group', help='The group name inside .clif File.')
-parser.add_argument('--lf_group', help='The group name inside .hdf5 File.', default='lightfield')
-
-
-if __name__ == "__main__":
-
-    args = parser.parse_args()
-    clif2lf(args.lightfiled, args.lf_file, args.clif_group, lf_group=args.lf_group)
-

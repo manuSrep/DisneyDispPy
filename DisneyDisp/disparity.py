@@ -7,26 +7,26 @@
 :license: GPL3
 """
 
-from __future__ import division, absolute_import, unicode_literals, print_function
+from __future__ import division, absolute_import, unicode_literals, \
+    print_function
 
-import argparse
 import os
 import shutil
 from itertools import repeat
 from multiprocessing import Pool, cpu_count
 
 import h5py
-import numpy as np
-from progressbar import Bar, ETA, Percentage, ProgressBar
-
 import matplotlib.pyplot as plt
+import numpy as np
+from miscpy import prepareLoading, prepareSaving
+from progressbar import Bar, ETA, Percentage, ProgressBar
 from scipy.ndimage.filters import median_filter
-from skimage.io import imsave
 from skimage.color import gray2rgb
+from skimage.io import imsave
 
 from ._confidence import edge_confidence
-from ._process_epi import process_epi, convert_process_epi
 from ._disparity import bilateral_median, propagation
+from ._process_epi import process_epi, convert_process_epi
 from ._scale import fine_to_course, course_to_fine
 from .lf2epi import calculate_resolutions, downsample_lightfield, create_epis
 
@@ -37,17 +37,19 @@ class Disney():
     disparity calculation.
     '''
 
-    def __init__(self, lightfield, lf_group, output_dir, working_dir='work_tmp/',
+    def __init__(self, lightfield, lf_dataset, output_dir,
+                 working_dir='work_tmp/',
                  n_cpus=-1, r_start=None, s_hat=None, DEBUG=False):
 
         """
-        Constructor
+        Constructor to settle up all files and parameters. Do also some pre-
+        computations required
 
         Parameters
         ----------
         lightfield : string
             The filename of the lightfield including the directory.
-        lf_group : string
+        lf_dataset : string
             The group name inside the lightfield's hdf5 file.
         output_dir: string
             The directory to store the final results in.
@@ -63,24 +65,20 @@ class Disney():
             enable DEBUG output
         """
 
-        self.DEBUG = DEBUG  # Plot intermediate results and other debugging output
+        lightfield = prepareLoading(lightfield)
+        self.output_dir = prepareSaving(output_dir)
+        self.working_dir = prepareSaving(working_dir)
 
         self.n_cpus = n_cpus
         if self.n_cpus == -1:
-            self.n_cpus = int(cpu_count() * 0.9)
+            self.n_cpus = cpu_count()
 
-        self.output_dir = os.path.expanduser(output_dir)
-        self.working_dir = os.path.expanduser(working_dir)
-        if not os.path.exists(self.output_dir):
-            os.makedirs(self.output_dir)
-        if not os.path.exists(self.working_dir):
-            os.makedirs(self.working_dir)
+        self.DEBUG = DEBUG  # Plot intermediate results and other debugging output
 
         # Attributes of .hdf5 files to load or store the data
-        self.lf_group = lf_group
+        self.lf_dataset = lf_dataset
         self.light_field = h5py.File(os.path.expanduser(lightfield), 'r')
-        self.epi_field = h5py.File(os.path.join(self.working_dir, 'epis.hdf5'),
-                                   'a')
+        self.epi_field = h5py.File(os.path.join(self.working_dir, 'epis.hdf5'),'a')
         self.disp_field = h5py.File(
             os.path.join(self.working_dir, 'disparities.hdf5'), 'a')
 
@@ -97,7 +95,7 @@ class Disney():
 
         # Runtime attributes
         self.lf_res = self.light_field[
-            self.lf_group].shape  # The resolution of the original lightfield (s,v,u)
+            self.lf_dataset].shape  # The resolution of the original lightfield (s,v,u)
         self.epi_res = None  # A ndarray [r]. The different EPI resolutions (v,u)
 
         self.r_start = self.lf_res[1:3]
@@ -113,23 +111,13 @@ class Disney():
         """
         Cleanup.
         """
-        self.light_field.close()
-        self.epi_field.close()
-        self.disp_field.close()
-        if self.DEBUG:
-            self.Ce_field.close()
-            self.Cd_field.close()
-            self.DB_field.close()
-            self.score_field.close()
-        else:
+        if not self.DEBUG:
             shutil.rmtree(self.working_dir)
-
 
     def initialize(self):
         """
         Load data from files or initialize if not available.
         """
-
         # 2) We need all epi data:
         if not self.epi_field.get('epis', default=False):
             lf_file = self.light_field.filename
@@ -138,9 +126,8 @@ class Disney():
             self.epi_field.close()
             tmp_file = os.path.join(self.working_dir, 'tmp.hdf5')
             epi_res = calculate_resolutions(self.lf_res[1], self.lf_res[2])
-            downsample_lightfield(lf_file, tmp_file, self.lf_group, epi_res)
-            create_epis(tmp_file, epi_file, self.lf_group, dtype=np.float64,
-                        RGB=False)
+            downsample_lightfield(lf_file, tmp_file, self.lf_dataset, epi_res)
+            create_epis(tmp_file, epi_file, self.lf_dataset, dtype=np.uint8,RGB=False)
             os.remove(tmp_file)
             self.light_field = h5py.File(lf_file, 'r')
             self.epi_field = h5py.File(epi_file, 'r')
@@ -266,12 +253,12 @@ class Disney():
         res_name = str(res[0]) + 'x' + str(res[1])
         if self.DEBUG:
             grp.require_dataset(res_name,
-                                        (res[0], self.lf_res[0], res[1], 4),
-                                        dtype=np.float64, fillvalue=np.nan)
+                                (res[0], self.lf_res[0], res[1], 4),
+                                dtype=np.float32, fillvalue=np.nan)
         else:
             grp.require_dataset(res_name,
-                                        (res[0], self.lf_res[0], res[1]),
-                                        dtype=np.float64, fillvalue=np.nan)
+                                (res[0], self.lf_res[0], res[1]),
+                                dtype=np.float32, fillvalue=np.nan)
             level = None
 
         data = self.disp_field['disparities/' + res_name]
@@ -337,8 +324,8 @@ class Disney():
         res_name = str(res[0]) + 'x' + str(res[1])
 
         grp.require_dataset(res_name,
-                                    (res[0], self.lf_res[0], res[1],3),
-                                    dtype=np.float64, fillvalue=np.nan)
+                            (res[0], self.lf_res[0], res[1], 3),
+                            dtype=np.float64, fillvalue=np.nan)
 
         data = self.score_field['scores/' + res_name]
 
@@ -529,12 +516,12 @@ class Disney():
         if self.DEBUG:
             d_set = grp.require_dataset(res_name,
                                         (res[0], self.lf_res[0], res[1], 4),
-                                        dtype=np.float64, fillvalue=np.nan)
+                                        dtype=np.float32, fillvalue=np.nan)
         else:
             level = None
             d_set = grp.require_dataset(res_name,
                                         (res[0], self.lf_res[0], res[1]),
-                                        dtype=np.float64, fillvalue=np.nan)
+                                        dtype=np.float32, fillvalue=np.nan)
 
         if level is None:
             if v is None and s is None and u is None:
@@ -593,8 +580,8 @@ class Disney():
         res_name = str(res[0]) + 'x' + str(res[1])
 
         d_set = grp.require_dataset(res_name,
-                                    (res[0], self.lf_res[0], res[1],3),
-                                    dtype=np.float64, fillvalue=np.nan)
+                                    (res[0], self.lf_res[0], res[1], 3),
+                                    dtype=np.float32, fillvalue=np.nan)
 
         if v is None and s is None and u is None:
             d_set[:, :, :, level] = data
@@ -633,7 +620,7 @@ class Disney():
         res_name = str(res[0]) + 'x' + str(res[1])
         d_set = grp.require_dataset(res_name,
                                     (res[0], self.lf_res[0], res[1], 2),
-                                    dtype=np.float64, fillvalue=0)
+                                    dtype=np.float32, fillvalue=0)
 
         if v is None and s is None and u is None:
             d_set[...] = data
@@ -674,7 +661,7 @@ class Disney():
             grp.attrs.create('threshold', threshold)
         res_name = str(res[0]) + 'x' + str(res[1])
         d_set = grp.require_dataset(res_name, (res[0], self.lf_res[0], res[1]),
-                                    dtype=np.float64, fillvalue=np.nan)
+                                    dtype=np.float32, fillvalue=np.nan)
 
         if v is None and s is None and u is None:
             d_set[...] = data
@@ -716,7 +703,7 @@ class Disney():
             grp.attrs.create('threshold', threshold)
         res_name = str(res[0]) + 'x' + str(res[1])
         d_set = grp.require_dataset(res_name, (res[0], self.lf_res[0], res[1]),
-                                    dtype=np.float64, fillvalue=np.nan)
+                                    dtype=np.float32, fillvalue=np.nan)
 
         if v is None and s is None and u is None:
             d_set[...] = data
@@ -757,8 +744,7 @@ class Disney():
 
         return s
 
-    def calculateDisp(self, min_disp, max_disp, stepsize, Ce_t, Cd_t, S_t,
-                      NOISEFREE=False):
+    def calculateDisp(self, min_disp, max_disp, stepsize, Ce_t, Cd_t, S_t, NOISEFREE=False):
         """
         The main method to calculate the disparity estimates.
 
@@ -781,9 +767,8 @@ class Disney():
             only be enabled for noisy data.
         """
         s_list = self.generate_s_hat_order()  # generate list of s_hat lines to go through
-        r_list = [r for r, res in enumerate(self.epi_res) if
-                  res[0] <= self.r_start[0] and res[1] <= self.r_start[
-                      1]]  # generate the indices of r we need to compute
+        r_list = [r for r, res in enumerate(self.epi_res)
+                  if res[0] <= self.r_start[0] and res[1] <= self.r_start[1]]  # generate the indices of r we need to compute
 
         for r, res in enumerate(self.epi_res):  # adjust disparity bounds
             if res[0] > self.r_start[0] and res[1] > self.r_start[1]:
@@ -793,14 +778,14 @@ class Disney():
                 max_disp *= u_scale
                 stepsize *= u_scale
 
-        # Initialize a progess bar to track the calculation process
-        max_val = long(0)
+        # Initialize a progress bar to track the calculation process
+        max_val = 0
         for r in r_list:
-            max_val += long(self.epi_res[r, 0] * len(s_list))
+            max_val += self.epi_res[r, 0] * len(s_list)
         widgets = ['Calculating disparities: ', Percentage(), ' ', Bar(), ' ',
                    ETA(), ' ']
         progress = ProgressBar(widgets=widgets, maxval=max_val).start()
-        current_val = long(0)
+        current_val = 0
 
         ###############################################################
         #                                                             #
@@ -825,22 +810,24 @@ class Disney():
                 COARSEST = False
 
             # Create some directories
-            sample_dir = os.path.join(self.output_dir,
-                                      'Plots/Radiance/{v_dim}x{u_dim}/'.format(
-                                          v_dim=v_dim, u_dim=u_dim))
+            sample_dir = os.path.join(
+                self.output_dir,'Plots/Radiance/{v_dim}x{u_dim}/'.format(
+                    v_dim=v_dim, u_dim=u_dim))
             if self.DEBUG and not os.path.exists(sample_dir):
                 os.makedirs(sample_dir)
-            propagation_dir = os.path.join(self.output_dir,
-                                           'Plots/Propagation/{v_dim}x{u_dim}/'.format(
-                                               v_dim=v_dim, u_dim=u_dim))
+            propagation_dir = os.path.join(
+                self.output_dir, 'Plots/Propagation/{v_dim}x{u_dim}/'.format(
+                    v_dim=v_dim, u_dim=u_dim))
             if self.DEBUG and not os.path.exists(propagation_dir):
                 os.makedirs(propagation_dir)
 
             # Find number of jobs to start
             max_jobs = self.n_cpus
-            min_task = int((v_dim * 0.3) // max_jobs) + 1
+            if v_dim < 300:
+                n_jobs = 1
+            else:
+                n_jobs = max_jobs
 
-            n_jobs = min(max_jobs, v_dim // min_task)
             n_tasks = v_dim // n_jobs
 
             epis = self.getEpi(res)  # The epis; ndarray[v,s,u].
@@ -853,28 +840,26 @@ class Disney():
             ###############################################################
             for s in s_list:  # scan through all lines in an epi; s is only the index of the line
 
-                r_bars = np.zeros((v_dim, u_dim),
-                                  dtype=np.float64)  # The scanline updated radiances of all epis; ndarray[v,u].
-                Md = np.full((v_dim, u_dim), False,
-                             dtype=np.bool)  # The scanline disparity confidences; ndarray[v,u].
+                r_bars = np.zeros((v_dim, u_dim), dtype=np.float32)  # The scanline updated radiances of all epis; ndarray[v,u].
+                Md = np.full((v_dim, u_dim), False, dtype=np.bool)  # The scanline disparity confidences; ndarray[v,u].
 
                 # 1. edge confidence (2):
                 # The edge mask is needed on resolution level per scanline.
-                # Thus we do the caclulation ones per resolution and store the
+                # Thus we do the calculation ones per resolution and store the
                 # mask in memory for efficient access. 
                 if not COARSEST:  # Only calculate EPI-pixels with high edge confidence
                     Ce, Me = edge_confidence(epis[:, s], window=9,
                                              threshold=Ce_t)
                 else:  # except for the coarsest resolution
                     Ce, Me = edge_confidence(epis[:, s], window=9, threshold=-1)
-                    assert np.all(
-                        Me), 'Unvalide edge confidence at coarsest resolution.'
+                    assert np.all(Me),\
+                        'Unvalide edge confidence at coarsest resolution.'
 
                 if self.DEBUG:
                     self.saveCe(Ce, res, s=s, threshold=Ce_t)
 
                 Mc = np.isnan(Ds[:, s])
-                M = np.logical_and(Me,Mc)
+                M = np.logical_and(Me, Mc)
 
                 if n_jobs > 1:  # only then perform multiprocessing
                     pool = Pool(processes=n_jobs)
@@ -884,8 +869,7 @@ class Disney():
                     #                       epi level                             #
                     #                                                             #
                     ###############################################################
-                    for v in range(0, v_dim,
-                                   n_jobs * n_tasks):  # go through all epis; v is only the index of the epi
+                    for v in range(0, v_dim, n_tasks):  # go through all epis; v is only the index of the epi
 
                         n = min(n_jobs * n_tasks, v_dim - v)
                         v_jobs = range(v, v + n)
@@ -904,12 +888,11 @@ class Disney():
                         Ce_jobs = iter([Ce[v_] for v_ in v_jobs])
                         M_jobs = iter([M[v_] for v_ in v_jobs])
 
-
-                        args = zip(epi_jobs, D_jobs, Ce_jobs,  M_jobs,
-                                    s_hat_jobs, min_disp_jobs, max_disp_jobs,
-                                    stepsize_jobs, Cd_t_jobs, NOISEFREE_jobs,
-                                    COARSEST_jobs, DEBUG_jobs, s_hat_DEBUG_jobs,
-                                    DEBUG_dir_jobs, v_jobs)
+                        args = zip(epi_jobs, D_jobs, Ce_jobs, M_jobs,
+                                   s_hat_jobs, min_disp_jobs, max_disp_jobs,
+                                   stepsize_jobs, Cd_t_jobs, NOISEFREE_jobs,
+                                   COARSEST_jobs, DEBUG_jobs, s_hat_DEBUG_jobs,
+                                   DEBUG_dir_jobs, v_jobs)
 
                         results_jobs = pool.imap(convert_process_epi, args,
                                                  chunksize=n_tasks)
@@ -926,9 +909,12 @@ class Disney():
                                 self.saveCd(results[3], res, v=v_,
                                             threshold=Cd_t)
                                 self.saveDBs(results[4], res, v=v_, s=s)
-                                self.saveScore(results[5], res, v=v_, s=s, level=0)
-                                self.saveScore(results[6], res, v=v_, s=s, level=1)
-                                self.saveScore(results[7], res, v=v_, s=s, level=2)
+                                self.saveScore(results[5], res, v=v_, s=s,
+                                               level=0)
+                                self.saveScore(results[6], res, v=v_, s=s,
+                                               level=1)
+                                self.saveScore(results[7], res, v=v_, s=s,
+                                               level=2)
                     pool.close()
                     pool.join()
 
@@ -946,7 +932,8 @@ class Disney():
                         # 5. Disparity confidence (7)
                         # 6. Disparity estiamte (6)
 
-                        Ds[v, s], r_bars[v], Md[v], Cd, DB, S_max, S_mean, S_argmax = process_epi(
+                        Ds[v, s], r_bars[v], Md[
+                            v], Cd, DB, S_max, S_mean, S_argmax = process_epi(
                             epis[v], Ds[v, s], Ce[v], M[v], s, min_disp,
                             max_disp, stepsize, Cd_t, NOISEFREE, COARSEST,
                             DEBUG=self.DEBUG, s_hat_DEBUG=s_list[0],
@@ -967,20 +954,22 @@ class Disney():
                 ###############################################################
 
                 # 7. bilateral median filter
+
                 if not COARSEST:  # using the threshold
-                    Ds[:, s] = bilateral_median(Ds[:, s], epis[:, s],  M, Me,
+                    Ds[:, s] = bilateral_median(Ds[:, s], epis[:, s], M, Me,
                                                 threshold=S_t)
                 else:  # except for the lowest resolution, which is necessary not to introduce new NaNs
-                    Ds[:, s] = bilateral_median(Ds[:, s], epis[:, s],  M, Me,
-                                               threshold=float('inf'))
+                    Ds[:, s] = bilateral_median(Ds[:, s], epis[:, s], M, Me,
+                                                threshold=float('inf'))
                 if self.DEBUG:
                     self.saveDisp(Ds[:, s], res, s=s, level=2)
 
-                M = np.logical_and(~Mc,~Md)
-                Ds[:,s][M] = np.nan # remove unvalide values
+                M = np.logical_and(~Mc, ~Md)
+                if COARSEST:
+                    assert not np.any(M)
+                Ds[:, s][M] = np.nan  # remove unvalide values
                 if self.DEBUG:
                     self.saveDisp(Ds[:, s], res, s=s, level=3)
-
 
                 # 8. Propagate from scanline
                 if self.s_hat is None:
@@ -988,18 +977,16 @@ class Disney():
                                                threshold=S_t, DEBUG=False)
                     if self.DEBUG:
                         if s == s_list[0]:
-                            imsave(os.path.join(propagation_dir,
-                                                'Propagation_v={v}_s={s}.png'.format(
-                                                    v=v_dim // 2, s=s)),
-                                   epi_plot[:,s,:])
+                            imsave(os.path.join(
+                                propagation_dir,'Propagation_v={v}_s={s}.png'.format(
+                                    v=v_dim // 2, s=s)),epi_plot[:, s, :])
 
                 if COARSEST:
                     assert not np.any(np.isnan(Ds[:, s]))
                 self.saveDisp(Ds, res, level=0)
 
-                current_val += long(v_dim)
+                current_val += v_dim
                 progress.update(current_val)
-
 
             ###############################################################
             #                                                             #
@@ -1036,23 +1023,30 @@ class Disney():
         generated.
         """
 
-        disp_dir = os.path.join(self.output_dir,'Plots/Disparity/{v_dim}x{u_dim}/'.format(v_dim=self.lf_res[1], u_dim=self.lf_res[2]))
+        disp_dir = os.path.join(self.output_dir,
+                                'Plots/Disparity/{v_dim}x{u_dim}/'.format(
+                                    v_dim=self.lf_res[1], u_dim=self.lf_res[2]))
         if not os.path.exists(disp_dir):
             os.makedirs(disp_dir)
 
         Disp_map_f = h5py.File(
             os.path.join(self.output_dir, 'disparity_map.hdf5'), 'w')
-        Disp_map = Disp_map_f.require_dataset('disparity_map',shape=self.lf_res[0:3],dtype=np.float64)
+        Disp_map = Disp_map_f.require_dataset('disparity_map',
+                                              shape=self.lf_res[0:3],
+                                              dtype=np.float64)
 
         s_list = self.generate_s_hat_order()
-        #Disp_map[:] = self.getDisp(self.epi_res[0], s=s level=0).swapaxes(0,1)#self.lf_res[0:3])
+        # Disp_map[:] = self.getDisp(self.epi_res[0], s=s level=0).swapaxes(0,1)#self.lf_res[0:3])
 
         for s in s_list:
-            Disp_map[s] = median_filter(self.getDisp(self.epi_res[0], s=s, level=0), size=(3, 3))  # we apply a median filter to remove remaining speccles
+            Disp_map[s] = median_filter(
+                self.getDisp(self.epi_res[0], s=s, level=0), size=(
+                3, 3))  # we apply a median filter to remove remaining speccles
             plt.plot()
             plt.imshow(Disp_map[s], cmap='gray', interpolation='None')
             plt.colorbar()
-            plt.savefig(os.path.join(disp_dir, str(s) + '_final_disparityMap.png'))
+            plt.savefig(
+                os.path.join(disp_dir, str(s) + '_final_disparityMap.png'))
             plt.close()
 
         if self.DEBUG:
@@ -1075,8 +1069,8 @@ class Disney():
                     os.makedirs(disp_dir)
 
                 score_dir = os.path.join(self.output_dir,
-                                            'Plots/Scores/{v_dim}x{u_dim}/'.format(
-                                                v_dim=v_dim, u_dim=u_dim))
+                                         'Plots/Scores/{v_dim}x{u_dim}/'.format(
+                                             v_dim=v_dim, u_dim=u_dim))
                 if not os.path.exists(score_dir):
                     os.makedirs(score_dir)
 
@@ -1107,132 +1101,101 @@ class Disney():
                 DB_map = self.getDBs(self.epi_res[r], s=s)
                 Cd_map, Cd_t = self.getCd(self.epi_res[r], s=s)
                 Md_map = Cd_map > Cd_t
-                Ce_map, Ce_t = self.getCe(self.epi_res[r],s=s)
+                Ce_map, Ce_t = self.getCe(self.epi_res[r], s=s)
                 Me_map = Ce_map > Ce_t
 
-
                 plt.plot()
-                plt.imsave(os.path.join(lf_dir, str(s) + '_ligthfield.png'),gray2rgb(Lf_map[...]))
+                plt.imsave(os.path.join(lf_dir, str(s) + '_ligthfield.png'),
+                           gray2rgb(Lf_map[...]))
                 plt.close()
 
                 plt.plot()
-                plt.imshow(Disp_map[ :, :, 0], cmap='gray',interpolation='none')
+                plt.imshow(Disp_map[:, :, 0], cmap='gray', interpolation='none')
                 plt.colorbar()
-                plt.savefig(os.path.join(disp_dir, str(s) + '_upsampled_disparityMap.png'))
+                plt.savefig(os.path.join(disp_dir, str(
+                    s) + '_upsampled_disparityMap.png'))
                 plt.close()
 
                 plt.plot()
-                plt.imshow(Disp_map[ :, :, 1], cmap='gray',interpolation='none')
+                plt.imshow(Disp_map[:, :, 1], cmap='gray', interpolation='none')
                 plt.colorbar()
-                plt.savefig(os.path.join(disp_dir, str(s) + '_raw_disparityMap.png'))
+                plt.savefig(
+                    os.path.join(disp_dir, str(s) + '_raw_disparityMap.png'))
                 plt.close()
 
                 plt.plot()
-                plt.imshow(Disp_map[ :, :, 2], cmap='gray',interpolation='none')
+                plt.imshow(Disp_map[:, :, 2], cmap='gray', interpolation='none')
                 plt.colorbar()
-                plt.savefig(os.path.join(disp_dir, str(s) + '_median_disparityMap.png'))
+                plt.savefig(
+                    os.path.join(disp_dir, str(s) + '_median_disparityMap.png'))
                 plt.close()
 
                 plt.plot()
-                plt.imshow(Disp_map[ :, :, 3], cmap='gray',interpolation='none')
+                plt.imshow(Disp_map[:, :, 3], cmap='gray', interpolation='none')
                 plt.colorbar()
-                plt.savefig(os.path.join(disp_dir, str(s) + '_confidendt_disparityMap.png'))
+                plt.savefig(os.path.join(disp_dir, str(
+                    s) + '_confidendt_disparityMap.png'))
                 plt.close()
 
-
                 plt.plot()
-                plt.imshow(Score_map[ :, :, 0], cmap='gray',interpolation='none')
+                plt.imshow(Score_map[:, :, 0], cmap='gray',
+                           interpolation='none')
                 plt.colorbar()
                 plt.savefig(os.path.join(score_dir, str(s) + '_S_max.png'))
                 plt.close()
 
                 plt.plot()
-                plt.imshow(Score_map[ :, :, 1], cmap='gray',interpolation='none')
+                plt.imshow(Score_map[:, :, 1], cmap='gray',
+                           interpolation='none')
                 plt.colorbar()
                 plt.savefig(os.path.join(score_dir, str(s) + '_S_mean.png'))
                 plt.close()
 
                 plt.plot()
-                plt.imshow(Score_map[ :, :, 2], cmap='gray',interpolation='none')
+                plt.imshow(Score_map[:, :, 2], cmap='gray',
+                           interpolation='none')
                 plt.colorbar()
                 plt.savefig(os.path.join(score_dir, str(s) + '_S_argmax.png'))
                 plt.close()
 
                 plt.plot()
-                plt.imshow(DB_map[ :, :, 0], cmap='gray',interpolation='none')
+                plt.imshow(DB_map[:, :, 0], cmap='gray', interpolation='none')
                 plt.colorbar()
-                plt.savefig(os.path.join(bounds_dir, str(s) + '_lowerDisparityBoundsMap.png'))
+                plt.savefig(os.path.join(bounds_dir, str(
+                    s) + '_lowerDisparityBoundsMap.png'))
                 plt.close()
 
                 plt.plot()
-                plt.imshow(DB_map[ :, :, 1], cmap='gray',interpolation='none')
+                plt.imshow(DB_map[:, :, 1], cmap='gray', interpolation='none')
                 plt.colorbar()
-                plt.savefig(os.path.join(bounds_dir, str(s) + '_upperDisparityBoundsMap.png'))
+                plt.savefig(os.path.join(bounds_dir, str(
+                    s) + '_upperDisparityBoundsMap.png'))
                 plt.close()
 
                 plt.plot()
                 plt.imshow(Cd_map[...], cmap='gray', interpolation='none')
                 plt.colorbar()
-                plt.savefig(os.path.join(dispConf_dir, str(s) + '_disparityConfidenceMap.png'))
+                plt.savefig(os.path.join(dispConf_dir, str(
+                    s) + '_disparityConfidenceMap.png'))
                 plt.close()
 
                 plt.plot()
                 plt.imshow(Md_map[...], cmap='gray', interpolation='none')
                 plt.colorbar()
-                plt.savefig(os.path.join(dispConf_dir, str(s) + '_disparityConfidenceMask.png'))
+                plt.savefig(os.path.join(dispConf_dir, str(
+                    s) + '_disparityConfidenceMask.png'))
                 plt.close()
 
                 plt.plot()
                 plt.imshow(Ce_map[...], cmap='gray', interpolation='none')
                 plt.colorbar()
-                plt.savefig(os.path.join(edge_dir, str(s) + '_egeConfidenceMap.png'))
+                plt.savefig(
+                    os.path.join(edge_dir, str(s) + '_egeConfidenceMap.png'))
                 plt.close()
 
                 plt.plot()
                 plt.imshow(Me_map[...], cmap='gray', interpolation='none')
                 plt.colorbar()
-                plt.savefig(os.path.join(edge_dir,str(s) + '_egeConfidenceMask.png'))
+                plt.savefig(
+                    os.path.join(edge_dir, str(s) + '_egeConfidenceMask.png'))
                 plt.close()
-
-
-
-
-################################################################################
-#                                                                              #
-#                       Can be used as a command line tool                     #
-#                                                                              #
-################################################################################
-
-parser = argparse.ArgumentParser(description='Calulate disparity fom a given lightfield.')
-
-parser.add_argument('lightfield', help='The filename including the directory of the lightfield.')
-
-parser.add_argument('--hdf5_group', help='The group name inside hdf5 File.', default='lightfield')
-parser.add_argument('--working_dir', help='The directory used to store intermediate data.', default='tmp/')
-parser.add_argument('--result_dir', help='The output directory.', default='results/')
-parser.add_argument('--s_hat', help='If given, only this s-dimension will be computed.', type=int, default=None)
-parser.add_argument('--r_start', help='The resolution to start with. Can only be used in DEBUG mode.',nargs=2, type=int, default=None)
-parser.add_argument('--min_disp', help='The minimal disparity to sample for.', type=float, default=1)
-parser.add_argument('--max_disp', help='The maximal disparity to sample for.', type=float, default=20)
-parser.add_argument('--stepsize', help='The disparity setp size during sampling .', type=float, default=1)
-parser.add_argument('--Ce_t', help='The threshold for the edge confidence measurement.', type=float, default=0.02)
-parser.add_argument('--Cd_t', help='The threshold for the depth confidence measurement.', type=float, default=0.1)
-parser.add_argument('--S_t', help='The threshold for the bilateral median filter measurement.',type=float, default=0.1)
-parser.add_argument('--n_jobs', help='The number of threads to use.', type=int, default=-1)
-parser.add_argument('-NOISEFREE', help='Disable radiance update for lightfield without noise', action='store_true')
-parser.add_argument('-DEBUG', help='Enable plotting of intermediate results',action='store_true')
-
-
-if __name__ == "__main__":
-
-    args = parser.parse_args()
-
-    disney = Disney(args.lightfield, args.hdf5_group, args.result_dir,
-                    working_dir=args.working_dir, n_cpus=args.n_jobs,
-                    r_start=args.r_start, s_hat=args.s_hat, DEBUG=args.DEBUG)
-
-    disney.calculateDisp(min_disp=args.min_disp, max_disp=args.max_disp,
-                         stepsize=args.stepsize, Ce_t=args.Ce_t, Cd_t=args.Cd_t,
-                         S_t=args.S_t, NOISEFREE=args.NOISEFREE)
-
-    disney.calculateMap()

@@ -28,12 +28,12 @@ from DisneyDisp import clif2lf
 parser = argparse.ArgumentParser(description='Convert lightfiled of .clif files to the .hdf5 file format.')
 parser.add_argument('clif_file',help='The filename including the directory of the .clif file.')
 parser.add_argument('lf_file',help='The filename including the directory of the .ddf5 file.')
-parser.add_argument('clif_group', help='The group name inside .clif File.')
-parser.add_argument('--lf_group', help='The group name inside .hdf5 File.',default='lightfield')
+parser.add_argument('clif_dataset', help='The group name inside .clif File.')
+parser.add_argument('--lf_dataset', help='The group name inside .hdf5 File.',default='lightfield')
 
 if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    clif2lf(args.lightfiled, args.lf_file, args.clif_group, lf_group=args.lf_group)
+    clif2lf(args.lightfiled, args.lf_file, args.clif_dataset, lf_dataset=args.lf_dataset)
 

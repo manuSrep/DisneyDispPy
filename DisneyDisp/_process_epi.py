@@ -103,7 +103,7 @@ def process_epi(epi, D, Ce, M, s_hat, min_disp, max_disp, stepsize, Cd_t,
     DB = find_disp_bounds(D, min_disp, max_disp,
                           stepsize)  # calcualte the current disparity bounds; ndarray[u]
     # 3. Radiance sampling(3)
-    R, disp_range, plot = sample_radiance(epi, s_hat, min_disp, max_disp,
+    R, Mr, disp_range, plot = sample_radiance(epi, s_hat, min_disp, max_disp,
                                           stepsize, DB, M, DEBUG=DEBUG)
     # The sampled radiances; ndarray[u,d,s]. The range of disparities; ndarray[d]. The plots; ndarray[d,s,u]
     if DEBUG:  # We plot the sampling results but only in an exemplary fashion
@@ -118,7 +118,7 @@ def process_epi(epi, D, Ce, M, s_hat, min_disp, max_disp, stepsize, Cd_t,
                                     d=disp_range[-1])), plot[-1])
 
     # 4. Score computation (4, 5)
-    S, R_bar = score_computation(R, epi, s_hat, M, h=0.02, NOISEFREE=NOISEFREE)
+    S, R_bar = score_computation(R, epi, s_hat, M, Mr, h=0.02, NOISEFREE=NOISEFREE)
     # The scores; ndarray[d,u]. The R_bar values; ndarray[d,u]
 
 
@@ -127,8 +127,7 @@ def process_epi(epi, D, Ce, M, s_hat, min_disp, max_disp, stepsize, Cd_t,
         Cd, Md, S_max, S_mean = disparity_confidence(S, Ce, threshold=Cd_t)
     else:  # except for the lowest resolution
         Cd, Md , S_max, S_mean = disparity_confidence(S, Ce, threshold=-1)
-        assert np.all(
-            Md), 'Unvalide disparity confidence at coarsest resolution.'
+        assert np.all(Md), 'Unvalide disparity confidence at coarsest resolution.'
     # The disparity confidence score; ndarray[u]. disparity confidence mask; ndarray[u].
 
 

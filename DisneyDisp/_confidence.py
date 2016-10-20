@@ -7,14 +7,13 @@
 :license: GPL3
 """
 
-from __future__ import division, absolute_import, unicode_literals, print_function
+from __future__ import division, absolute_import, unicode_literals, \
+    print_function
 
 import warnings
 
 import numpy as np
 from skimage.morphology import binary_opening, square
-
-
 
 
 def edge_confidence(epi, window=9, threshold=0.02):
@@ -49,9 +48,7 @@ def edge_confidence(epi, window=9, threshold=0.02):
     v_dim = epi.shape[0]
     u_dim = epi.shape[1]
     # Check dimensions of input data
-    assert epi.shape == (
-        v_dim,
-        u_dim,), 'Input EPI has wrong shape in function \'edge_confidence\'.'
+    assert epi.shape == (v_dim, u_dim,), 'Input EPI has wrong shape in function \'edge_confidence\'.'
 
     # Make window size odd
     if window % 2 == 0:
@@ -61,18 +58,15 @@ def edge_confidence(epi, window=9, threshold=0.02):
         window += 1
 
     # We avoid the border problem by padding the epi.
-    padded_epi = np.pad(epi, ((0, 0), (int(window // 2), int(window // 2))),
-                        'edge')
-    assert padded_epi.shape == (v_dim,
-                                u_dim + window - 1,), 'Padded epi has wrong shape in function \'edge_confidence\'.'
+    padded_epi = np.pad(epi, ((0, 0), (int(window // 2), int(window // 2))), 'edge')
+    assert padded_epi.shape == (v_dim, u_dim + window - 1,), 'Padded epi has wrong shape in function \'edge_confidence\'.'
 
     # Calculate confidence values
-    Ce = np.zeros(epi.shape, dtype=np.float64)  # initiate array
+    Ce = np.zeros(epi.shape, dtype=np.float32)  # initiate array
     for k in range(window):
         Ce += (epi[...] - padded_epi[:, k:epi.shape[1] + k]) ** 2
     Me = Ce > threshold  # create confidence Mask
-    Me = binary_opening(Me, selem=square(2),
-                        out=Me)  # work with square to avoid aliasing
+    Me = binary_opening(Me, selem=square(2), out=Me)  # work with square to avoid aliasing
 
     # Let's see if our results have reasonable meaning'
     assert np.all(
@@ -81,7 +75,6 @@ def edge_confidence(epi, window=9, threshold=0.02):
                         u_dim,), 'Ce output has incorrect shape in fucntion \'edge_confidence\'.'
     assert Me.shape == (v_dim,
                         u_dim,), 'Me output has incorrect shape in fucntion \'edge_confidence\'.'
-
     return Ce, Me
 
 
@@ -116,7 +109,7 @@ def disparity_confidence(S, Ce, threshold=0.1):
     u_dim = S.shape[0]
     d_dim = S.shape[1]
     # Check dimensions of input data
-    assert S.shape == (u_dim,d_dim), 'Input S has wrong shape in function \'disparity_confidence\'.'
+    assert S.shape == (u_dim, d_dim), 'Input S has wrong shape in function \'disparity_confidence\'.'
     assert Ce.shape == (u_dim,), 'Input Ce has wrong shape in function \'disparity_confidence\'.'
 
     S_max = np.max(S, axis=-1)
@@ -132,5 +125,4 @@ def disparity_confidence(S, Ce, threshold=0.1):
         u_dim,), 'Cd output has incorrect shape in fucntion \'disparity_confidence\'.'
     assert Md.shape == (
         u_dim,), 'Md output has incorrect shape in fucntion \'disparity_confidence\'.'
-
     return Cd, Md, S_max, S_mean
